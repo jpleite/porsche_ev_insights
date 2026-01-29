@@ -6,7 +6,9 @@
       "Bash(npm run lint:*)",
       "Bash(curl:*)",
       "Bash(pkill:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(gh:*)"
     ]
   }
 }
