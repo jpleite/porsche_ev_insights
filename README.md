@@ -115,6 +115,12 @@ All data is imported from Porsche in metric units and automatically converted ba
   <em>Settings - Customize your experience</em>
 </p>
 
+<p align="center">
+  <img src="screenshots/day_theme.png" alt="Day Theme" width="800"/>
+  <br/>
+  <em>Day Theme - Light mode for daytime use</em>
+</p>
+
 ## Getting Started
 
 ### Use Online
