@@ -145,14 +145,18 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## How to Export Your Data
 
-1. Open the **My Porsche** app on your phone
-2. Go to **Trips** section
-3. Select the trips you want to analyze
-4. Tap **Export** and choose **CSV format**
-5. Transfer the CSV file to your computer
-6. Upload it to Porsche EV Insights
+1. Open **Porsche Connect** app on your phone
+2. Go to **Vehicle details**
+3. Scroll down to **All trip data**
+4. Tap the **download trip icon** (top right corner)
+5. Select **"Since start"** and toggle **Download complete trip history**
+6. Save or send by email
+7. Select **"Since charging"** and make sure **Download complete trip history** toggle is on
+8. Save or send by email
+9. Transfer both CSV files to your computer
+10. Upload them to Porsche EV Insights
 
-The app supports both **"Since Start"** and **"Since Charge"** CSV exports (maximum 12 months limited by Porsche Connect). If you export and upload both CSV files you'll have richer stats and information.
+The app supports both **"Since Start"** and **"Since Charge"** CSV exports (maximum 12 months limited by Porsche Connect). Uploading both files provides richer stats and information.
 
 ## Tech Stack
 
