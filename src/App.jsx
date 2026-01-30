@@ -47,6 +47,7 @@ export default function App() {
   const [electricityPrice, setElectricityPrice] = useState(0.25);
   const [petrolPrice, setPetrolPrice] = useState(1.80);
   const [petrolConsumption, setPetrolConsumption] = useState(8.0);
+  const [batteryCapacity, setBatteryCapacity] = useState(83.7);
   const [unitSystem, setUnitSystem] = useState('metric');
   const [currency, setCurrency] = useState('EUR');
   const [fuelConsFormat, setFuelConsFormat] = useState('L/100km');
@@ -77,6 +78,7 @@ export default function App() {
       setElectricityPrice(savedSettings.electricityPrice ?? 0.25);
       setPetrolPrice(savedSettings.petrolPrice ?? 1.80);
       setPetrolConsumption(savedSettings.petrolConsumption ?? 8.0);
+      setBatteryCapacity(savedSettings.batteryCapacity ?? 83.7);
       setUnitSystem(savedSettings.unitSystem ?? 'metric');
       setCurrency(savedSettings.currency ?? 'EUR');
       setFuelConsFormat(savedSettings.fuelConsFormat ?? 'L/100km');
@@ -85,8 +87,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    safeStorage.set(STORAGE_KEYS.SETTINGS, { electricityPrice, petrolPrice, petrolConsumption, unitSystem, currency, fuelConsFormat, elecConsFormat });
-  }, [electricityPrice, petrolPrice, petrolConsumption, unitSystem, currency, fuelConsFormat, elecConsFormat]);
+    safeStorage.set(STORAGE_KEYS.SETTINGS, { electricityPrice, petrolPrice, petrolConsumption, batteryCapacity, unitSystem, currency, fuelConsFormat, elecConsFormat });
+  }, [electricityPrice, petrolPrice, petrolConsumption, batteryCapacity, unitSystem, currency, fuelConsFormat, elecConsFormat]);
 
   // Reset consumption formats and currency when unit system changes
   useEffect(() => {
@@ -395,7 +397,8 @@ export default function App() {
   const batteryAnalysis = useMemo(() => {
     if (!data) return null;
 
-    const { usableBattery, officialRange, officialConsumption } = TAYCAN_SPECS;
+    const { officialRange, officialConsumption } = TAYCAN_SPECS;
+    const usableBattery = batteryCapacity; // Use user-configurable battery capacity
 
     const realWorldRange = data.summary.avgConsumption > 0
       ? precise.div(precise.mul(usableBattery, 100), data.summary.avgConsumption)
@@ -424,7 +427,7 @@ export default function App() {
       worstMonth,
       seasonalVariation
     };
-  }, [data]);
+  }, [data, batteryCapacity]);
 
   // ========== PREDICTIVE ANALYTICS ==========
   const predictions = useMemo(() => {
@@ -477,7 +480,7 @@ export default function App() {
   const chargingOptimization = useMemo(() => {
     if (!data) return null;
 
-    const { usableBattery } = TAYCAN_SPECS;
+    const usableBattery = batteryCapacity; // Use user-configurable battery capacity
     const daysOfData = data.monthlyData.length * 30;
     const chargesPerWeek = daysOfData > 0 ? precise.round(precise.div(data.summary.totalChargeCycles * 7, daysOfData), 1) : 0;
     const energyPerCharge = data.summary.totalChargeCycles > 0 ? precise.div(data.summary.totalEnergy, data.summary.totalChargeCycles) : 0;
@@ -502,7 +505,7 @@ export default function App() {
       batteryFullCycles,
       tripsPerCharge: data.summary.avgTripsPerCharge
     };
-  }, [data, costs]);
+  }, [data, costs, batteryCapacity]);
 
   // ========== BENCHMARK COMPARISON ==========
   const benchmarks = useMemo(() => {
@@ -684,14 +687,14 @@ export default function App() {
 
   const handleBackup = useCallback(() => {
     try {
-      const backup = { version: 1, timestamp: new Date().toISOString(), data: appData, vehicleModel, settings: { electricityPrice, petrolPrice, petrolConsumption, unitSystem, currency, fuelConsFormat, elecConsFormat } };
+      const backup = { version: 1, timestamp: new Date().toISOString(), data: appData, vehicleModel, settings: { electricityPrice, petrolPrice, petrolConsumption, batteryCapacity, unitSystem, currency, fuelConsFormat, elecConsFormat } };
       const modelSlug = vehicleModel ? vehicleModel.toLowerCase().replace(/\s+/g, '-') : 'porsche';
       const filename = `${modelSlug}-backup-${new Date().toISOString().split('T')[0]}.json`;
       downloadFile(JSON.stringify(backup, null, 2), filename);
     } catch (err) {
       setModalConfig({ title: 'Export Error', message: 'Failed to create backup: ' + err.message, variant: 'danger' });
     }
-  }, [appData, vehicleModel, electricityPrice, petrolPrice, petrolConsumption, unitSystem, currency, fuelConsFormat, elecConsFormat]);
+  }, [appData, vehicleModel, electricityPrice, petrolPrice, petrolConsumption, batteryCapacity, unitSystem, currency, fuelConsFormat, elecConsFormat]);
 
   const handleRestore = useCallback((file) => {
     const reader = new FileReader();
@@ -704,6 +707,7 @@ export default function App() {
           setElectricityPrice(backup.settings.electricityPrice ?? 0.25);
           setPetrolPrice(backup.settings.petrolPrice ?? 1.80);
           setPetrolConsumption(backup.settings.petrolConsumption ?? 8.0);
+          setBatteryCapacity(backup.settings.batteryCapacity ?? 83.7);
           setUnitSystem(backup.settings.unitSystem ?? 'metric');
           setCurrency(backup.settings.currency ?? 'EUR');
           setFuelConsFormat(backup.settings.fuelConsFormat ?? 'L/100km');
@@ -832,6 +836,8 @@ export default function App() {
               setPetrolPrice={setPetrolPrice}
               petrolConsumption={petrolConsumption}
               setPetrolConsumption={setPetrolConsumption}
+              batteryCapacity={batteryCapacity}
+              setBatteryCapacity={setBatteryCapacity}
               setShowUpload={setShowUpload}
               handleClearData={handleClearData}
               handleBackup={handleBackup}

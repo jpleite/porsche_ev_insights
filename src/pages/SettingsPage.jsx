@@ -17,6 +17,8 @@ export function SettingsPage({
   setPetrolPrice,
   petrolConsumption,
   setPetrolConsumption,
+  batteryCapacity,
+  setBatteryCapacity,
   setShowUpload,
   handleClearData,
   handleBackup,
@@ -94,6 +96,20 @@ export function SettingsPage({
               <label className={`block text-xs mb-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Petrol Consumption ({fuelConsFormat})</label>
               <input type="number" step="0.1" value={petrolConsumption} onChange={(e) => setPetrolConsumption(parseFloat(e.target.value) || 0)} className={`w-full px-3 py-2 rounded-lg text-sm focus:border-sky-500 outline-none ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-zinc-50 border-zinc-300 text-zinc-900'} border`} />
             </div>
+          </div>
+        </div>
+
+        {/* Vehicle Settings */}
+        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'}`}>
+          <h3 className={`text-sm font-semibold mb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Vehicle Settings</h3>
+          <div className="space-y-3">
+            <div>
+              <label className={`block text-xs mb-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Usable Battery Capacity (kWh)</label>
+              <input type="number" step="0.1" value={batteryCapacity} onChange={(e) => setBatteryCapacity(parseFloat(e.target.value) || 83.7)} className={`w-full px-3 py-2 rounded-lg text-sm focus:border-sky-500 outline-none ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-zinc-50 border-zinc-300 text-zinc-900'} border`} />
+            </div>
+            <p className={`text-xs ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>
+              Used for range calculations. Common values: 71 kWh (base), 83.7 kWh (Performance Battery Plus)
+            </p>
           </div>
         </div>
 
