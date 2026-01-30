@@ -187,7 +187,7 @@ Contributions are welcome! Feel free to:
 
 ## License
 
-MIT License - feel free to use this project for personal or commercial purposes.
+MIT License - for personal use only.
 
 ---
 
