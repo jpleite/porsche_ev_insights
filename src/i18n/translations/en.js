@@ -79,8 +79,14 @@ export const en = {
 
   // Upload modal
   upload: {
-    title: 'Upload Porsche Data',
+    title: 'Upload EV Data',
     mergeTitle: 'Add More Data',
+    audiZip: 'Audi e-tron GT ZIP',
+    audiZipAlt: '(myAudi export)',
+    audiZipDesc: 'Upload ExportTrips ZIP file from myAudi app',
+    audiNoDataFile: 'No trip data found in ZIP file. Expected "Short-term memory.csv" or "Long-term memory.csv".',
+    audiParseError: 'Could not parse Audi trip data. Please check the file format.',
+    orPorsche: 'or Porsche CSV',
     sinceStart: 'Since Start',
     sinceStartDesc: 'Individual trips',
     sinceCharge: 'Since Charge',
@@ -98,7 +104,7 @@ export const en = {
     mergeUnavailable: 'Merge Not Available',
     mergeUnavailableDesc: 'Your existing data was imported before merge support was added. Please use Replace mode this time. Future imports will support merging.',
     missingFile: 'Missing File',
-    missingFileDesc: 'Please upload the "Since Start" file to proceed.'
+    missingFileDesc: 'Please upload trip data to proceed.'
   },
 
   // Settings page
@@ -221,6 +227,7 @@ export const en = {
     avgDistancePerDay: 'Avg Distance per Day',
     mostActiveDay: 'Most Active Day',
     leastActiveDay: 'Least Active Day',
+    distanceOverTime: 'Distance Over Time',
     avgDistance: 'Avg Distance'
   },
 
@@ -298,7 +305,7 @@ export const en = {
     officialRange: 'Official Range',
     rangeEfficiency: 'Range Efficiency',
     energyPerTrip: 'Energy/Trip',
-    tripsPerCharge: 'Trips/Charge',
+    tripsPerCharge: 'Trips/Full Battery',
     distancePerCharge: 'Distance/Charge',
     batteryPerTrip: 'Battery/Trip',
     consumptionVsOfficial: 'vs Official',
@@ -481,6 +488,7 @@ export const en = {
     yourTaycanST: 'Your Taycan Sport Turismo',
     yourMacan: 'Your Macan Electric',
     yourCayenne: 'Your Cayenne Electric',
+    yourEtronGT: 'Your e-tron GT',
     yourPorsche: 'Your Porsche',
     average: 'Average',
     avg: 'Avg',

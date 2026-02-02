@@ -79,8 +79,14 @@ export const ja = {
 
   // Upload modal
   upload: {
-    title: 'ポルシェデータをアップロード',
+    title: 'EVデータをアップロード',
     mergeTitle: 'データを追加',
+    audiZip: 'アウディe-tron GT ZIP',
+    audiZipAlt: '(myAudiエクスポート)',
+    audiZipDesc: 'myAudiアプリからExportTrips ZIPファイルをアップロード',
+    audiNoDataFile: 'ZIPにトリップデータが見つかりません。"Short-term memory.csv"または"Long-term memory.csv"が必要です。',
+    audiParseError: 'アウディのトリップデータを処理できません。ファイル形式を確認してください。',
+    orPorsche: 'またはポルシェCSV',
     sinceStart: '開始から',
     sinceStartDesc: '個別トリップ',
     sinceCharge: '充電から',
@@ -98,7 +104,7 @@ export const ja = {
     mergeUnavailable: '統合は利用できません',
     mergeUnavailableDesc: 'データは統合サポートが追加される前にインポートされました。今回は置換を使用してください。今後のインポートは統合をサポートします。',
     missingFile: 'ファイルがありません',
-    missingFileDesc: '続行するには「開始から」ファイルをアップロードしてください。'
+    missingFileDesc: '続行するにはトリップデータをアップロードしてください。'
   },
 
   // Settings page
@@ -299,7 +305,7 @@ export const ja = {
     officialRange: '公式航続距離',
     rangeEfficiency: '航続距離効率',
     energyPerTrip: 'トリップあたりエネルギー',
-    tripsPerCharge: '充電あたりトリップ数',
+    tripsPerCharge: '満充電時トリップ数',
     distancePerCharge: '充電あたり距離',
     batteryPerTrip: 'トリップあたりバッテリー',
     consumptionVsOfficial: '公式値との比較',
@@ -481,6 +487,7 @@ export const ja = {
     yourTaycanST: 'あなたのTaycan Sport Turismo',
     yourMacan: 'あなたのMacan Electric',
     yourCayenne: 'あなたのCayenne Electric',
+    yourEtronGT: 'あなたのe-tron GT',
     yourPorsche: 'あなたのポルシェ',
     average: '平均',
     avg: '平均',

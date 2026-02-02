@@ -6,17 +6,20 @@ This guide walks you through using Porsche EV Insights for the first time.
 
 Before you begin, you'll need:
 
-- A Porsche electric vehicle (Taycan, Macan Electric, or Cayenne Electric)
-- The My Porsche app installed on your phone
+- A Porsche electric vehicle (Taycan, Macan Electric, or Cayenne Electric) or an **Audi e-tron GT**
+- The **My Porsche** app (for Porsche) or **myAudi** app (for Audi) installed on your phone
 - Trip data collected by your vehicle (trips are automatically recorded)
 - A modern web browser (Chrome, Firefox, Safari, or Edge)
 
 ## Step 1: Export Your Data
 
-First, you need to export your trip data from the My Porsche app. The app provides two types of exports:
+First, you need to export your trip data from your vehicle's app.
 
+**For Porsche vehicles:** Export from the My Porsche app:
 1. **Since Start** (required) - Contains all individual trip records
 2. **Since Charge** (optional) - Contains charging cycle information
+
+**For Audi e-tron GT:** Export from the myAudi app as a ZIP file containing trip memory data.
 
 For detailed instructions on exporting, see [Exporting Data from My Porsche](Exporting-Data-from-My-Porsche).
 
@@ -35,12 +38,16 @@ If this is your first time, you might want to try the sample data first to famil
 
 ## Step 3: Upload Your Data
 
-Click the **Upload CSV Files** button. You'll see a dialog with two upload areas:
+Click the **Upload CSV Files** button. You'll see a dialog with upload areas:
 
+**For Audi e-tron GT:**
+- **Audi ZIP File** - Upload your myAudi ZIP export directly
+
+**For Porsche vehicles:**
 1. **Since Start** (Required) - Click this area and select your "Since start" CSV file
 2. **Since Charge** (Optional) - Click this area and select your "Since charge" CSV file if you have it
 
-Once you've selected at least the Since Start file, click **Analyze Data** to process your trips.
+Once you've selected your file(s), click **Analyze Data** to process your trips.
 
 ## Step 4: Select Your Vehicle
 

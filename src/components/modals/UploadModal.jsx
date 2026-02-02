@@ -16,6 +16,7 @@ export function UploadModal({
   if (!showUpload) return null;
 
   const isMergeMode = uploadMode === 'merge';
+  const isAudiMode = uploadStatus.start?.isAudi;
 
   return (
     <div className={`fixed inset-0 ${darkMode ? 'bg-black/70' : 'bg-black/50'} backdrop-blur-sm z-50 flex items-center justify-center p-4`}>
@@ -63,14 +64,30 @@ export function UploadModal({
         )}
 
         <div className="space-y-3">
-          <label className={`block p-4 rounded-xl border-2 border-dashed cursor-pointer text-center ${darkMode ? 'border-zinc-700 hover:border-sky-500/50' : 'border-zinc-300 hover:border-sky-500'}`}>
-            <input type="file" accept=".csv" className="hidden" onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'start')} />
+          {/* Audi ZIP upload */}
+          <label className={`block p-4 rounded-xl border-2 border-dashed cursor-pointer text-center ${darkMode ? 'border-zinc-700 hover:border-orange-500/50' : 'border-zinc-300 hover:border-orange-500'}`}>
+            <input type="file" accept=".zip" className="hidden" onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'audi')} />
+            <div className={`text-sm font-medium ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('upload.audiZip')} <span className="text-zinc-500">{t('upload.audiZipAlt')}</span></div>
+            <div className="text-xs text-zinc-500">{t('upload.audiZipDesc')}</div>
+            {uploadStatus.start?.isAudi && <div className="mt-2 text-xs text-emerald-500"><span className="inline-flex items-center gap-1"><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>{uploadStatus.start.name}</span> ({t('upload.tripsCount', { count: uploadStatus.start.rows })})</div>}
+          </label>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3">
+            <div className={`flex-1 h-px ${darkMode ? 'bg-zinc-700' : 'bg-zinc-200'}`}></div>
+            <span className={`text-xs ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>{t('upload.orPorsche')}</span>
+            <div className={`flex-1 h-px ${darkMode ? 'bg-zinc-700' : 'bg-zinc-200'}`}></div>
+          </div>
+
+          {/* Porsche CSV uploads */}
+          <label className={`block p-4 rounded-xl border-2 border-dashed cursor-pointer text-center ${darkMode ? 'border-zinc-700 hover:border-sky-500/50' : 'border-zinc-300 hover:border-sky-500'} ${isAudiMode ? 'opacity-50 pointer-events-none' : ''}`}>
+            <input type="file" accept=".csv" className="hidden" disabled={isAudiMode} onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'start')} />
             <div className={`text-sm font-medium ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('upload.sinceStart')} <span className="text-sky-500">*{t('common.required')}</span></div>
             <div className="text-xs text-zinc-500">{t('upload.sinceStartDesc')}</div>
-            {uploadStatus.start && <div className="mt-2 text-xs text-emerald-500"><span className="inline-flex items-center gap-1"><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>{uploadStatus.start.name}</span> ({t('upload.tripsCount', { count: uploadStatus.start.rows })})</div>}
+            {uploadStatus.start && !uploadStatus.start.isAudi && <div className="mt-2 text-xs text-emerald-500"><span className="inline-flex items-center gap-1"><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>{uploadStatus.start.name}</span> ({t('upload.tripsCount', { count: uploadStatus.start.rows })})</div>}
           </label>
-          <label className={`block p-4 rounded-xl border-2 border-dashed cursor-pointer text-center ${darkMode ? 'border-zinc-700 hover:border-blue-500/50' : 'border-zinc-300 hover:border-blue-500'}`}>
-            <input type="file" accept=".csv" className="hidden" onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'charge')} />
+          <label className={`block p-4 rounded-xl border-2 border-dashed cursor-pointer text-center ${darkMode ? 'border-zinc-700 hover:border-blue-500/50' : 'border-zinc-300 hover:border-blue-500'} ${isAudiMode ? 'opacity-50 pointer-events-none' : ''}`}>
+            <input type="file" accept=".csv" className="hidden" disabled={isAudiMode} onChange={(e) => e.target.files[0] && handleFileUpload(e.target.files[0], 'charge')} />
             <div className={`text-sm font-medium ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>{t('upload.sinceCharge')} <span className="text-zinc-500">{t('common.optional')}</span></div>
             <div className="text-xs text-zinc-500">{t('upload.sinceChargeDesc')}</div>
             {uploadStatus.charge && <div className="mt-2 text-xs text-emerald-500"><span className="inline-flex items-center gap-1"><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>{uploadStatus.charge.name}</span> ({t('upload.cyclesCount', { count: uploadStatus.charge.rows })})</div>}

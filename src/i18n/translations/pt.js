@@ -79,8 +79,14 @@ export const pt = {
 
   // Upload modal
   upload: {
-    title: 'Carregar Dados Porsche',
+    title: 'Carregar Dados EV',
     mergeTitle: 'Adicionar Mais Dados',
+    audiZip: 'Audi e-tron GT ZIP',
+    audiZipAlt: '(exportação myAudi)',
+    audiZipDesc: 'Carregue o ficheiro ZIP ExportTrips da app myAudi',
+    audiNoDataFile: 'Nenhum dado de viagem encontrado no ZIP. Esperado "Short-term memory.csv" ou "Long-term memory.csv".',
+    audiParseError: 'Não foi possível processar os dados de viagem Audi. Por favor verifique o formato do ficheiro.',
+    orPorsche: 'ou CSV Porsche',
     sinceStart: 'Desde o Início',
     sinceStartDesc: 'Viagens individuais',
     sinceCharge: 'Desde o Carregamento',
@@ -98,7 +104,7 @@ export const pt = {
     mergeUnavailable: 'Junção Não Disponível',
     mergeUnavailableDesc: 'Os seus dados foram importados antes do suporte de junção ser adicionado. Por favor use Substituir desta vez. Futuras importações suportarão junção.',
     missingFile: 'Ficheiro em Falta',
-    missingFileDesc: 'Por favor carregue o ficheiro "Desde o Início" para continuar.'
+    missingFileDesc: 'Por favor carregue os dados de viagem para continuar.'
   },
 
   // Settings page
@@ -299,7 +305,7 @@ export const pt = {
     officialRange: 'Autonomia Oficial',
     rangeEfficiency: 'Eficiência de Autonomia',
     energyPerTrip: 'Energia por Viagem',
-    tripsPerCharge: 'Viagens por Carga',
+    tripsPerCharge: 'Viagens/Bateria Cheia',
     distancePerCharge: 'Distância por Carga',
     batteryPerTrip: 'Bateria por Viagem',
     consumptionVsOfficial: 'vs Oficial',
@@ -481,6 +487,7 @@ export const pt = {
     yourTaycanST: 'O Seu Taycan Sport Turismo',
     yourMacan: 'O Seu Macan Electric',
     yourCayenne: 'O Seu Cayenne Electric',
+    yourEtronGT: 'O Seu e-tron GT',
     yourPorsche: 'O Seu Porsche',
     average: 'Média',
     avg: 'Méd',

@@ -1,5 +1,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Porsche-Taycan-d5001c?style=for-the-badge&logo=porsche&logoColor=white" alt="Porsche Taycan"/>
+  <img src="https://img.shields.io/badge/Audi-e--tron_GT-bb0a30?style=for-the-badge&logo=audi&logoColor=white" alt="Audi e-tron GT"/>
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19"/>
   <img src="https://img.shields.io/badge/Privacy-First-22c55e?style=for-the-badge&logo=shield&logoColor=white" alt="Privacy First"/>
 </p>
@@ -7,7 +8,7 @@
 <h1 align="center">Porsche EV Insights</h1>
 
 <p align="center">
-  <strong>Privacy-first analytics dashboard for your Porsche EV trip data</strong>
+  <strong>Privacy-first analytics dashboard for your Porsche EV and Audi e-tron GT trip data</strong>
 </p>
 
 <p align="center">
@@ -23,6 +24,8 @@
 ## Why Porsche EV Insights?
 
 I felt the Porsche app lacks the deeper insights that can be extracted from the trip data it collects. Porsche's My Porsche app lets you export trip data as CSV files, but analyzing that data isn't straightforward. **Porsche EV Insights** transforms your raw CSV exports into beautiful, actionable insights - all while keeping your data 100% private.
+
+Now also supporting **Audi e-tron GT** - which shares the same J1 platform as the Taycan!
 
 ### Key Highlights
 
@@ -42,7 +45,7 @@ I felt the Porsche app lacks the deeper insights that can be extracted from the 
 | **Battery Insights** | Charging patterns and battery usage statistics |
 | **Smart Insights** | AI-generated observations about your driving habits |
 | **Data Merge** | Import new CSV exports and merge with existing data (no duplicates) |
-| **Vehicle Selection** | Choose from 50 Porsche EV models with accurate WLTP specs |
+| **Vehicle Selection** | Choose from 54+ EV models (Porsche + Audi e-tron GT) with accurate WLTP specs |
 | **EV Comparison** | Compare your real-world consumption vs WLTP and other EVs |
 | **Flexible Units** | Support for Metric, Imperial (UK), and Imperial (US) units |
 | **10 Languages** | EN, PT, ES, FR, DE, IT, NL, PL, ZH, JA |
@@ -58,6 +61,17 @@ All Porsche electric vehicles are supported with accurate battery and WLTP speci
 - **Cayenne Electric** (coming soon)
 
 Both J1.1 (2020-2024) and J1.2 (2025+) generation Taycans are supported, with Performance Battery (PB) and Performance Battery Plus (PB+) options.
+
+### Audi e-tron GT Support
+
+The **Audi e-tron GT** shares the J1 platform with the Taycan, and is now fully supported:
+
+- **e-tron GT** (2021-2024, 2025+)
+- **S e-tron GT** (2025+)
+- **RS e-tron GT** (2021-2024, 2025+)
+- **RS e-tron GT performance** (2025+)
+
+Audi data can be imported from the **myAudi app** as a ZIP file export.
 
 ## Units & Currency Settings
 
@@ -175,6 +189,17 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 The app supports both **"Since Start"** and **"Since Charge"** CSV exports (maximum 12 months limited by Porsche Connect). Uploading both files provides richer stats and information.
 
+### How to Export Audi e-tron GT Data
+
+1. Open **myAudi** app on your phone
+2. Go to **Trips** or **Travel Data**
+3. Tap **Export** or **Share**
+4. Export as **ZIP file** (contains Short-term and Long-term memory CSVs)
+5. Transfer the ZIP file to your computer
+6. Upload the ZIP directly to Porsche EV Insights
+
+Note: Audi exports are typically in imperial units (miles/mph) and are automatically converted to metric during import.
+
 ### Merging New Data
 
 Since Porsche Connect only allows exporting the last 12 months of data, you may need to merge newer exports with your existing data:
@@ -215,6 +240,12 @@ Contributions are welcome! Feel free to:
 - Submit pull requests
 
 ## Release History
+
+### v1.3.3-beta (February 2026)
+- **Audi e-tron GT support**: Import trip data from myAudi app ZIP exports
+- **6 new vehicle models**: e-tron GT, S e-tron GT, RS e-tron GT (both generations)
+- **Auto unit conversion**: Audi's imperial data (miles/mph) automatically converted to metric
+- **Smart format detection**: Automatically detects Audi CSV format even in wrong upload slot
 
 ### v1.3.2-beta (February 2026)
 - **Bug fix**: Trips per Hour chart now shows all 24 hours (00-23) even when some hours have no trips
@@ -274,5 +305,5 @@ MIT License - for personal use only.
 ---
 
 <p align="center">
-  Made with care for Porsche EV owners by <a href="https://github.com/jpleite">jpleite</a>
+  Made with care for Porsche EV and Audi e-tron GT owners by <a href="https://github.com/jpleite">jpleite</a>
 </p>

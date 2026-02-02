@@ -1,7 +1,7 @@
 {
   "name": "porsche_ev_insights",
   "private": true,
-  "version": "1.3.2-beta",
+  "version": "1.3.3-beta",
   "type": "module",
   "homepage": "https://jpleite.github.io/porsche_ev_insights",
   "scripts": {

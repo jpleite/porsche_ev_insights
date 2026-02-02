@@ -111,7 +111,20 @@ export const PORSCHE_EV_MODELS = [
   // ========== CAYENNE ELECTRIC ==========
 
   { id: 'cayenne-base-2026', name: 'Cayenne Electric Base (2026)', grossBattery: 113.0, usableBattery: 108.0, wltpRange: 642, wltpConsumption: 20.8, generation: 'Gen1', bodyStyle: 'suv' },
-  { id: 'cayenne-turbo-2026', name: 'Cayenne Electric Turbo (2026)', grossBattery: 113.0, usableBattery: 108.0, wltpRange: 623, wltpConsumption: 21.4, generation: 'Gen1', bodyStyle: 'suv' }
+  { id: 'cayenne-turbo-2026', name: 'Cayenne Electric Turbo (2026)', grossBattery: 113.0, usableBattery: 108.0, wltpRange: 623, wltpConsumption: 21.4, generation: 'Gen1', bodyStyle: 'suv' },
+
+  // ========== AUDI E-TRON GT (J1 PLATFORM) ==========
+  // Same platform as Taycan, technically similar specs
+
+  // Audi e-tron GT - First Generation (2021-2024)
+  { id: 'etron-gt-2021', name: 'Audi e-tron GT (2021-2024)', grossBattery: 93.4, usableBattery: 83.7, wltpRange: 488, wltpConsumption: 19.6, generation: 'J1.1', bodyStyle: 'sedan', brand: 'audi' },
+  { id: 'etron-gt-rs-2021', name: 'Audi RS e-tron GT (2021-2024)', grossBattery: 93.4, usableBattery: 83.7, wltpRange: 472, wltpConsumption: 20.2, generation: 'J1.1', bodyStyle: 'sedan', brand: 'audi' },
+
+  // Audi e-tron GT - Second Generation (2025+)
+  { id: 'etron-gt-2025', name: 'Audi e-tron GT (2025+)', grossBattery: 105.0, usableBattery: 97.0, wltpRange: 609, wltpConsumption: 17.8, generation: 'J1.2', bodyStyle: 'sedan', brand: 'audi' },
+  { id: 'etron-gt-s-2025', name: 'Audi S e-tron GT (2025+)', grossBattery: 105.0, usableBattery: 97.0, wltpRange: 609, wltpConsumption: 17.8, generation: 'J1.2', bodyStyle: 'sedan', brand: 'audi' },
+  { id: 'etron-gt-rs-2025', name: 'Audi RS e-tron GT (2025+)', grossBattery: 105.0, usableBattery: 97.0, wltpRange: 598, wltpConsumption: 18.1, generation: 'J1.2', bodyStyle: 'sedan', brand: 'audi' },
+  { id: 'etron-gt-rs-perf-2025', name: 'Audi RS e-tron GT performance (2025+)', grossBattery: 105.0, usableBattery: 97.0, wltpRange: 531, wltpConsumption: 20.6, generation: 'J1.2', bodyStyle: 'sedan', brand: 'audi' }
 ];
 
 // Default vehicle (Taycan 4 Cross Turismo with Performance Battery Plus, most common configuration)
@@ -129,11 +142,14 @@ export const getVehiclesGrouped = () => {
     'Taycan Cross Turismo': [],
     'Taycan Sport Turismo': [],
     'Macan Electric': [],
-    'Cayenne Electric': []
+    'Cayenne Electric': [],
+    'Audi e-tron GT': []
   };
 
   PORSCHE_EV_MODELS.forEach(v => {
-    if (v.name.includes('Cross Turismo')) {
+    if (v.brand === 'audi') {
+      groups['Audi e-tron GT'].push(v);
+    } else if (v.name.includes('Cross Turismo')) {
       groups['Taycan Cross Turismo'].push(v);
     } else if (v.name.includes('Sport Turismo')) {
       groups['Taycan Sport Turismo'].push(v);
@@ -154,12 +170,15 @@ export const guessVehicleFromString = (str) => {
   if (!str) return null;
   const lower = str.toLowerCase();
 
+  // Check for Audi first (before other checks)
+  const isAudi = lower.includes('audi') || lower.includes('e-tron gt') || lower.includes('etron gt');
+
   // Check for model line
   const isCrossTurismo = lower.includes('cross') || lower.includes('ct');
   const isSportTurismo = lower.includes('sport turismo') || lower.includes('st');
   const isMacan = lower.includes('macan');
   const isCayenne = lower.includes('cayenne');
-  const isTaycan = lower.includes('taycan') || (!isMacan && !isCayenne);
+  const isTaycan = !isAudi && (lower.includes('taycan') || (!isMacan && !isCayenne));
 
   // Check for variant
   const isTurboGT = lower.includes('turbo gt');
@@ -182,7 +201,9 @@ export const guessVehicleFromString = (str) => {
   let candidates = [...PORSCHE_EV_MODELS];
 
   // Filter by model line
-  if (isMacan) {
+  if (isAudi) {
+    candidates = candidates.filter(v => v.brand === 'audi');
+  } else if (isMacan) {
     candidates = candidates.filter(v => v.name.includes('Macan'));
   } else if (isCayenne) {
     candidates = candidates.filter(v => v.name.includes('Cayenne'));
@@ -195,7 +216,20 @@ export const guessVehicleFromString = (str) => {
   }
 
   // Filter by variant
-  if (isTurboGT) {
+  if (isAudi) {
+    // Audi-specific variants: RS performance, RS, S, base
+    const isRSPerf = lower.includes('performance') || lower.includes('perf');
+    const isRS = !isRSPerf && lower.includes('rs');
+    const isS = !isRS && !isRSPerf && lower.includes(' s ');
+
+    if (isRSPerf) {
+      candidates = candidates.filter(v => v.name.includes('performance'));
+    } else if (isRS) {
+      candidates = candidates.filter(v => v.name.includes('RS') && !v.name.includes('performance'));
+    } else if (isS) {
+      candidates = candidates.filter(v => v.name.includes('S e-tron'));
+    }
+  } else if (isTurboGT) {
     candidates = candidates.filter(v => v.name.includes('Turbo GT'));
   } else if (isTurboS) {
     candidates = candidates.filter(v => v.name.includes('Turbo S'));

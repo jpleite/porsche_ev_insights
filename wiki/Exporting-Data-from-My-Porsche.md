@@ -1,6 +1,6 @@
-# Exporting Data from My Porsche
+# Exporting Data from My Porsche / myAudi
 
-The My Porsche app collects detailed trip data every time you drive your Porsche EV. This guide explains how to export that data for use with Porsche EV Insights.
+The My Porsche and myAudi apps collect detailed trip data every time you drive. This guide explains how to export that data for use with Porsche EV Insights.
 
 ## Understanding the Data
 
@@ -89,6 +89,33 @@ The exported dates may be in different formats depending on your region:
 
 Both formats are automatically recognized.
 
+## Exporting from myAudi (e-tron GT)
+
+If you have an Audi e-tron GT, you can export data from the myAudi app:
+
+1. Open the **myAudi** app
+2. Navigate to **Trips** or **Travel Data**
+3. Look for **Export** or **Share** option
+4. Export as a **ZIP file** (contains Short-term and Long-term memory CSVs)
+5. Transfer the ZIP file to your computer
+6. Upload the ZIP directly to Porsche EV Insights
+
+### Audi Data Format
+
+The myAudi app exports data as a ZIP containing CSV files with:
+- Trip date and time
+- Distance traveled (may be in miles)
+- Average speed (may be in mph)
+- Average consumption (may be in kWh/100mi)
+
+Porsche EV Insights automatically:
+- Extracts the CSV from the ZIP
+- Detects imperial units and converts to metric
+- Extracts the VIN from the file header
+- Maps the data to the standard format used by the dashboard
+
+Note: Audi exports don't include separate charging cycle data, so some charging-specific metrics will show as zero.
+
 ## What Data is Captured
 
 Each trip record in the "Since Start" file typically includes:
@@ -150,3 +177,5 @@ It does **not** contain:
 - Personal account information
 
 Porsche EV Insights processes this data entirely in your browser and never uploads it to any server.
+
+Note: Audi e-tron GT exports may include the VIN (Vehicle Identification Number) in the file header, which is extracted for reference but not stored or shared.

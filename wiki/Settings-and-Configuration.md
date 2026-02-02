@@ -42,6 +42,12 @@ Select your specific Porsche EV model from the dropdown. Vehicles are grouped by
 - Cayenne Electric (Base)
 - Cayenne Turbo Electric
 
+**Audi e-tron GT** (J1 platform)
+- e-tron GT (2021-2024, 2025+)
+- S e-tron GT (2025+)
+- RS e-tron GT (2021-2024, 2025+)
+- RS e-tron GT performance (2025+)
+
 When you select a vehicle, its specifications are displayed:
 - Gross battery capacity
 - Usable battery capacity

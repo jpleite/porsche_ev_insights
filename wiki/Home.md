@@ -1,6 +1,6 @@
 # Porsche EV Insights
 
-Welcome to the Porsche EV Insights wiki. This documentation will help you get the most out of the dashboard for analyzing your Porsche electric vehicle's trip data.
+Welcome to the Porsche EV Insights wiki. This documentation will help you get the most out of the dashboard for analyzing your Porsche EV or Audi e-tron GT trip data.
 
 ## What is Porsche EV Insights?
 
@@ -8,13 +8,17 @@ Porsche EV Insights is a privacy-first web application that transforms the trip 
 
 ## Supported Vehicles
 
-The dashboard supports all Porsche electric vehicles:
+The dashboard supports all Porsche electric vehicles and the Audi e-tron GT:
 
+**Porsche**
 - **Taycan Sedan** - Base RWD, 4, 4S, GTS, Turbo, Turbo S, Turbo GT
 - **Taycan Cross Turismo** - 4, 4S, GTS, Turbo, Turbo S
 - **Taycan Sport Turismo** - 4S, GTS
 - **Macan Electric** - Base, 4, 4S, Turbo
 - **Cayenne Electric** - Base, Turbo
+
+**Audi** (J1 platform - same as Taycan)
+- **e-tron GT** - Base, S, RS, RS performance (2021-2024 and 2025+ generations)
 
 ## Quick Start
 
@@ -66,4 +70,4 @@ Porsche EV Insights is open source. You can find the source code and contribute 
 
 ## Version
 
-This documentation covers version 1.3.0-beta and later.
+This documentation covers version 1.3.3-beta and later.

@@ -79,8 +79,14 @@ export const nl = {
 
   // Upload modal
   upload: {
-    title: 'Porsche-gegevens uploaden',
+    title: 'EV-gegevens uploaden',
     mergeTitle: 'Meer gegevens toevoegen',
+    audiZip: 'Audi e-tron GT ZIP',
+    audiZipAlt: '(myAudi-export)',
+    audiZipDesc: 'Upload ExportTrips ZIP-bestand uit de myAudi-app',
+    audiNoDataFile: 'Geen ritgegevens gevonden in ZIP. Verwacht "Short-term memory.csv" of "Long-term memory.csv".',
+    audiParseError: 'Kon Audi-ritgegevens niet verwerken. Controleer het bestandsformaat.',
+    orPorsche: 'of Porsche CSV',
     sinceStart: 'Sinds start',
     sinceStartDesc: 'Individuele ritten',
     sinceCharge: 'Sinds opladen',
@@ -98,7 +104,7 @@ export const nl = {
     mergeUnavailable: 'Samenvoegen niet beschikbaar',
     mergeUnavailableDesc: 'Uw gegevens werden geïmporteerd voordat samenvoegen werd ondersteund. Gebruik deze keer Vervangen. Toekomstige imports ondersteunen samenvoegen.',
     missingFile: 'Bestand ontbreekt',
-    missingFileDesc: 'Upload het "Sinds start" bestand om door te gaan.'
+    missingFileDesc: 'Upload ritgegevens om door te gaan.'
   },
 
   // Settings page
@@ -299,7 +305,7 @@ export const nl = {
     officialRange: 'Officieel Bereik',
     rangeEfficiency: 'Bereik-efficiëntie',
     energyPerTrip: 'Energie per rit',
-    tripsPerCharge: 'Ritten per lading',
+    tripsPerCharge: 'Ritten/Volle Batterij',
     distancePerCharge: 'Afstand per lading',
     batteryPerTrip: 'Batterij per rit',
     consumptionVsOfficial: 'vs Officieel',
@@ -481,6 +487,7 @@ export const nl = {
     yourTaycanST: 'Jouw Taycan Sport Turismo',
     yourMacan: 'Jouw Macan Electric',
     yourCayenne: 'Jouw Cayenne Electric',
+    yourEtronGT: 'Jouw e-tron GT',
     yourPorsche: 'Jouw Porsche',
     average: 'Gemiddelde',
     avg: 'Gem',

@@ -13,7 +13,8 @@ import { precise } from './utils/precise';
 import { unitConvert } from './utils/unitConvert';
 import { safeStorage } from './utils/storage';
 import { downloadFile } from './utils/download';
-import { parseCSV } from './utils/csvParser';
+import { parseCSV, parseAudiCSV, isAudiFormat } from './utils/csvParser';
+import JSZip from 'jszip';
 
 // i18n
 import { useTranslation } from './i18n';
@@ -555,6 +556,7 @@ export default function App() {
     const getVehicleTranslationKey = (vehicleName) => {
       if (!vehicleName) return { key: 'yourPorsche', shortName: 'Porsche' };
       const nameLower = vehicleName.toLowerCase();
+      if (nameLower.includes('audi') || nameLower.includes('e-tron gt')) return { key: 'yourEtronGT', shortName: 'e-tron GT' };
       if (nameLower.includes('cross turismo')) return { key: 'yourTaycanCT', shortName: 'Taycan Cross Turismo' };
       if (nameLower.includes('sport turismo')) return { key: 'yourTaycanST', shortName: 'Taycan Sport Turismo' };
       if (nameLower.includes('macan')) return { key: 'yourMacan', shortName: 'Macan Electric' };
@@ -719,19 +721,84 @@ export default function App() {
     };
   }, [data, unitSystem, units, speedRangeLabels, t]);
 
-  const handleFileUpload = useCallback((file, type) => {
+  const handleFileUpload = useCallback(async (file, type) => {
+    // Handle Audi ZIP files
+    if (type === 'audi' && file.name.endsWith('.zip')) {
+      try {
+        const zip = await JSZip.loadAsync(file);
+        const files = Object.keys(zip.files);
+
+        // Look for Short-term memory.csv or Long-term memory.csv
+        const shortTermFile = files.find(f => f.toLowerCase().includes('short-term') || f.toLowerCase().includes('short term'));
+        const longTermFile = files.find(f => f.toLowerCase().includes('long-term') || f.toLowerCase().includes('long term'));
+
+        // Prefer short-term (individual trips), fall back to long-term
+        const dataFile = shortTermFile || longTermFile;
+        if (!dataFile) {
+          setModalConfig({ title: 'Error', message: t('upload.audiNoDataFile'), variant: 'danger' });
+          return;
+        }
+
+        const content = await zip.files[dataFile].async('string');
+        const { rows, vin } = parseAudiCSV(content);
+
+        if (rows.length === 0) {
+          setModalConfig({ title: 'Error', message: t('upload.audiParseError'), variant: 'danger' });
+          return;
+        }
+
+        // Reset both start and charge, set start with Audi data
+        setUploadStatus({
+          start: {
+            name: file.name,
+            rows: rows.length,
+            data: rows,
+            model: 'Audi e-tron GT',
+            isAudi: true,
+            vin
+          },
+          charge: null
+        });
+      } catch (err) {
+        setModalConfig({ title: 'Error', message: 'Error parsing ZIP file: ' + err.message, variant: 'danger' });
+      }
+      return;
+    }
+
+    // Handle regular CSV files (Porsche format)
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const parsed = parseCSV(e.target.result);
+        const text = e.target.result;
+
+        // Check if this is actually an Audi CSV (in case user picked wrong upload area)
+        if (isAudiFormat(text)) {
+          const { rows, vin } = parseAudiCSV(text);
+          if (rows.length > 0) {
+            setUploadStatus({
+              start: {
+                name: file.name,
+                rows: rows.length,
+                data: rows,
+                model: 'Audi e-tron GT',
+                isAudi: true,
+                vin
+              },
+              charge: null
+            });
+            return;
+          }
+        }
+
+        const parsed = parseCSV(text);
         const model = extractVehicleModel(file.name);
-        setUploadStatus(prev => ({ ...prev, [type]: { name: file.name, rows: parsed.length, data: parsed, model } }));
+        setUploadStatus(prev => ({ ...prev, [type]: { name: file.name, rows: parsed.length, data: parsed, model, isAudi: false } }));
       } catch (err) {
         setModalConfig({ title: 'Error', message: 'Error parsing file: ' + err.message, variant: 'danger' });
       }
     };
     reader.readAsText(file);
-  }, []);
+  }, [t]);
 
   const processUploadedFiles = useCallback(() => {
     if (!uploadStatus.start?.data) {

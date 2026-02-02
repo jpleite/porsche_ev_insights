@@ -15,21 +15,27 @@ Click **Upload CSV Files** to proceed with your own data.
 
 ### The Upload Dialog
 
-The upload dialog has two drop zones:
+The upload dialog has multiple upload areas:
 
-**Since Start (Required)**
+**Audi e-tron GT (ZIP file)**
 
-Click this area to select your "Since Start" CSV file. This file contains your individual trip records and is required for the dashboard to function. When a valid file is selected, you'll see:
+If you have an Audi e-tron GT, click this area to upload your myAudi ZIP export directly. The ZIP file contains trip memory CSVs that are automatically extracted and processed. Audi data in imperial units (miles/mph) is automatically converted to metric.
+
+**Porsche - Since Start (Required)**
+
+Click this area to select your "Since Start" CSV file from the My Porsche app. This file contains your individual trip records and is required for Porsche vehicles. When a valid file is selected, you'll see:
 - A checkmark indicating success
 - The filename
 - The number of trips found
 
-**Since Charge (Optional)**
+**Porsche - Since Charge (Optional)**
 
 Click this area to select your "Since Charge" CSV file. This file contains charging cycle data. While not required, it enables:
 - Accurate charge cycle counting
 - Charging pattern analysis
 - Better trips-per-charge calculations
+
+Note: Audi exports don't include separate charging data, so only the trip data is available.
 
 ### Processing Your Data
 
@@ -156,10 +162,15 @@ Because data is in local storage:
 
 ## Automatic Vehicle Detection
 
-When you upload a CSV file, the dashboard attempts to detect your vehicle model from the filename. For example:
+When you upload a CSV file, the dashboard attempts to detect your vehicle model from the filename or content. For example:
 
+**Porsche:**
 - `Taycan 4 Cross Turismo-Since start-2026-01-30.csv` detects "Taycan 4 Cross Turismo"
 - `Macan Electric-Desde o arranque-2026-01-29.csv` detects "Macan Electric"
+
+**Audi:**
+- ZIP files containing Audi trip data are automatically detected as "Audi e-tron GT"
+- The VIN from the CSV header is extracted for reference
 
 If detected, the vehicle model is shown in the header badge. You can always override this by selecting a different vehicle in Settings.
 

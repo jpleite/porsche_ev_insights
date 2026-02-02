@@ -79,8 +79,14 @@ export const zh = {
 
   // Upload modal
   upload: {
-    title: '上传保时捷数据',
+    title: '上传电动车数据',
     mergeTitle: '添加更多数据',
+    audiZip: '奥迪e-tron GT ZIP',
+    audiZipAlt: '(myAudi导出)',
+    audiZipDesc: '上传myAudi应用的ExportTrips ZIP文件',
+    audiNoDataFile: 'ZIP中未找到行程数据。期望"Short-term memory.csv"或"Long-term memory.csv"。',
+    audiParseError: '无法处理奥迪行程数据。请检查文件格式。',
+    orPorsche: '或保时捷CSV',
     sinceStart: '自启动以来',
     sinceStartDesc: '单次行程',
     sinceCharge: '自充电以来',
@@ -98,7 +104,7 @@ export const zh = {
     mergeUnavailable: '合并不可用',
     mergeUnavailableDesc: '您的数据是在添加合并支持之前导入的。这次请使用替换。以后的导入将支持合并。',
     missingFile: '缺少文件',
-    missingFileDesc: '请上传"自启动以来"文件以继续。'
+    missingFileDesc: '请上传行程数据以继续。'
   },
 
   // Settings page
@@ -299,7 +305,7 @@ export const zh = {
     officialRange: '官方续航',
     rangeEfficiency: '续航效率',
     energyPerTrip: '每次行程能耗',
-    tripsPerCharge: '每次充电行程数',
+    tripsPerCharge: '满电行程数',
     distancePerCharge: '每次充电距离',
     batteryPerTrip: '每次行程电量',
     consumptionVsOfficial: '与官方对比',
@@ -481,6 +487,7 @@ export const zh = {
     yourTaycanST: '您的Taycan Sport Turismo',
     yourMacan: '您的Macan Electric',
     yourCayenne: '您的Cayenne Electric',
+    yourEtronGT: '您的e-tron GT',
     yourPorsche: '您的保时捷',
     average: '平均',
     avg: '均',
