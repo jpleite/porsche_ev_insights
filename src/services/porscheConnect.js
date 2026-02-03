@@ -7,7 +7,9 @@
 
 import { PORSCHE_EV_MODELS } from '../constants/porscheEvModels';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// In production (Vercel), API routes are at /api/*
+// In development, they're at localhost:3001/api/*
+const API_BASE = import.meta.env.DEV ? 'http://localhost:3001' : '';
 
 // Storage keys for session persistence
 const SESSION_KEY = 'porsche_connect_session';
@@ -92,7 +94,7 @@ export async function login(email, password, captcha = null) {
     body.captchaState = captcha.state;
   }
 
-  const response = await fetch(`${API_BASE}/api/auth/login`, {
+  const response = await fetch(`${API_BASE}/api/porsche/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body)
@@ -126,7 +128,7 @@ export async function refreshToken() {
   if (!sessionId) return false;
 
   try {
-    const response = await fetch(`${API_BASE}/api/auth/refresh`, {
+    const response = await fetch(`${API_BASE}/api/porsche/refresh`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId })
@@ -153,7 +155,7 @@ export async function logout() {
   const sessionId = getStoredSession();
   if (sessionId) {
     try {
-      await fetch(`${API_BASE}/api/auth/logout`, {
+      await fetch(`${API_BASE}/api/porsche/logout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId })
@@ -213,7 +215,7 @@ async function apiRequest(endpoint) {
  * @returns {Promise<Array<Vehicle>>}
  */
 export async function getVehicles() {
-  return apiRequest('/api/vehicles');
+  return apiRequest('/api/porsche/vehicles');
 }
 
 /**
@@ -222,7 +224,7 @@ export async function getVehicles() {
  * @returns {Promise<VehicleOverview>}
  */
 export async function getVehicleOverview(vin) {
-  return apiRequest(`/api/vehicles/${vin}/overview`);
+  return apiRequest(`/api/porsche/vehicle/${vin}/overview`);
 }
 
 /**
@@ -232,7 +234,7 @@ export async function getVehicleOverview(vin) {
  * @returns {Promise<TripStatistics>}
  */
 export async function getTripStatistics(vin, type = 'short') {
-  return apiRequest(`/api/vehicles/${vin}/trips?type=${type}`);
+  return apiRequest(`/api/porsche/vehicle/${vin}/trips?type=${type}`);
 }
 
 /**
@@ -241,7 +243,7 @@ export async function getTripStatistics(vin, type = 'short') {
  * @returns {Promise<VehicleStatus>}
  */
 export async function getVehicleStatus(vin) {
-  return apiRequest(`/api/vehicles/${vin}/status`);
+  return apiRequest(`/api/porsche/vehicle/${vin}/status`);
 }
 
 /**
@@ -250,7 +252,7 @@ export async function getVehicleStatus(vin) {
  * @returns {Promise<VehicleCapabilities>}
  */
 export async function getVehicleCapabilities(vin) {
-  return apiRequest(`/api/vehicles/${vin}/capabilities`);
+  return apiRequest(`/api/porsche/vehicle/${vin}/capabilities`);
 }
 
 /**
@@ -259,7 +261,7 @@ export async function getVehicleCapabilities(vin) {
  * @returns {Promise<VehiclePictures>}
  */
 export async function getVehiclePictures(vin) {
-  return apiRequest(`/api/vehicles/${vin}/pictures`);
+  return apiRequest(`/api/porsche/vehicle/${vin}/pictures`);
 }
 
 /**
