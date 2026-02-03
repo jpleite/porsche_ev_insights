@@ -58,7 +58,8 @@ export const fr = {
     costs: 'Coûts',
     environmental: 'Environnement',
     battery: 'Batterie',
-    insights: 'Analyses'
+    insights: 'Analyses',
+    myCar: 'Ma Voiture'
   },
 
   // Sidebar
@@ -107,16 +108,50 @@ export const fr = {
     missingFileDesc: 'Veuillez télécharger les données de trajet pour continuer.'
   },
 
+  // Porsche Connect
+  porscheConnect: {
+    title: 'Porsche Connect',
+    subtitle: 'Données en direct de votre véhicule',
+    checking: 'Vérification de la connexion...',
+    loginDescription: 'Connectez-vous avec votre Porsche ID pour synchroniser les données de trajet directement depuis votre véhicule.',
+    email: 'Porsche ID (Email)',
+    password: 'Mot de passe',
+    login: 'Se connecter',
+    loggingIn: 'Connexion en cours...',
+    logout: 'Se déconnecter',
+    privacyNote: 'Vos identifiants sont envoyés de manière sécurisée à Porsche et ne sont jamais stockés.',
+    selectVehicle: 'Sélectionnez un véhicule à synchroniser:',
+    fetchData: 'Synchroniser les données de trajet',
+    loadingVehicles: 'Chargement des véhicules...',
+    loading: 'Chargement...',
+    noVehicles: 'Aucun véhicule trouvé dans votre compte Porsche Connect.',
+    noTrips: 'Aucune donnée de trajet disponible. Assurez-vous d\'avoir effectué des trajets avec Porsche Connect activé.',
+    errorTitle: 'Erreur de connexion',
+    serverUnavailable: 'Le serveur proxy Porsche Connect n\'est pas en cours d\'exécution. Veuillez le démarrer pour activer la synchronisation des données en direct.',
+    serverInstructions: 'Exécutez "cd server && npm install && npm start" dans votre terminal, puis réessayez.',
+    syncComplete: 'Synchronisation terminée',
+    syncStats: '{new} trajets synchronisés depuis votre {model}.',
+    syncMergeStats: '{new} nouveaux trajets ajoutés ({duplicates} doublons ignorés). Total: {total} trajets.',
+    sessionExpired: 'Votre session a expiré. Veuillez vous reconnecter.',
+    connected: 'Connecté',
+    lastSync: 'Dernière synchronisation',
+    captchaDescription: 'Porsche nécessite une vérification. Veuillez entrer le texte affiché dans l\'image.',
+    captchaLabel: 'Code de vérification',
+    captchaPlaceholder: 'Entrez le texte affiché ci-dessus',
+    verifyCaptcha: 'Vérifier',
+    verifying: 'Vérification en cours...',
+    checkingForUpdates: 'Recherche de nouveaux trajets...',
+    syncing: 'Synchronisation des données de trajet...',
+    newDataSynced: 'Nouveaux trajets synchronisés!'
+  },
+
   // Settings page
   settings: {
     title: 'Paramètres',
 
-    // Language section
-    language: 'Langue',
+    // Language & Units section
+    languageAndUnits: 'Langue et unités',
     languageLabel: 'Langue d\'affichage',
-
-    // Units & Currency section
-    unitsAndCurrency: 'Unités et devise',
     unitSystem: 'Système d\'unités',
     currency: 'Devise',
     fuelConsumption: 'Consommation carburant',
@@ -165,6 +200,14 @@ export const fr = {
     dataManagement: 'Gestion des données',
     uploadCsvFiles: 'Télécharger fichiers CSV',
     clearAllData: 'Effacer toutes les données',
+
+    // Porsche Connect section
+    porscheConnect: 'Porsche Connect',
+    porscheConnected: 'Connecté à Porsche',
+    porscheConnectDesc: 'Connectez-vous aux serveurs Porsche pour synchroniser automatiquement vos données de trajet.',
+    connectToPorsche: 'Se connecter à Porsche',
+    syncData: 'Synchroniser les données de trajet',
+    porscheLogout: 'Déconnecter',
 
     // Backup & restore section
     backupRestore: 'Sauvegarde et restauration',
@@ -315,6 +358,7 @@ export const fr = {
     consumptionVsOfficial: 'vs Officiel',
     seasonalVariation: 'Variation saisonnière',
     chargesPerWeek: 'Charges par semaine',
+    energyPerCharge: 'Énergie/Charge',
     chargingLosses: 'Pertes de charge',
     offPeakSavings: 'Économies heures creuses',
     fullCycles: 'Cycles complets',
@@ -511,5 +555,40 @@ export const fr = {
     highwayCruiser: 'Voyageur Autoroutier',
     weekendDriver: 'Conducteur du Week-end',
     efficientDriver: 'Conducteur Efficace'
+  },
+
+  // My Car tab
+  myCar: {
+    noDataTitle: 'Aucun véhicule connecté',
+    noDataDesc: 'Connectez-vous à Porsche Connect pour afficher les informations de votre véhicule.',
+    connectButton: 'Connecter à Porsche',
+    vehiclePhotos: 'Photos du véhicule',
+    lastKnownLocation: 'Dernière position connue',
+    locationUnavailable: 'Données de localisation non disponibles',
+    openInMaps: 'Ouvrir dans Plans',
+    heading: 'Direction',
+    batteryLevel: 'Niveau de batterie',
+    estimatedRange: 'Autonomie estimée',
+    totalMileage: 'Kilométrage total',
+    electricRange: 'Autonomie électrique',
+    vehicleDetails: 'Détails du véhicule',
+    model: 'Modèle',
+    year: 'Année',
+    generation: 'Génération',
+    steering: 'Direction',
+    leftHandDrive: 'Conduite à gauche',
+    rightHandDrive: 'Conduite à droite',
+    locked: 'Verrouillé',
+    unlocked: 'Déverrouillé',
+    lastUpdated: 'Dernière mise à jour',
+    frontView: 'Vue avant',
+    sideView: 'Vue latérale',
+    rearView: 'Vue arrière',
+    topView: 'Vue de dessus',
+    tirePressure: 'Pression des Pneus',
+    tireFL: 'AVG',
+    tireFR: 'AVD',
+    tireRL: 'ARG',
+    tireRR: 'ARD'
   }
 };

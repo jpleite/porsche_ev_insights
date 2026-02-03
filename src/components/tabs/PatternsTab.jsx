@@ -37,7 +37,7 @@ export function PatternsTab({
               height={xAxisConfig.height}
               dy={xAxisConfig.dy}
             />
-            <YAxis stroke={chartColors.axis} fontSize={11} />
+            <YAxis stroke={chartColors.axis} fontSize={11} width={40} />
             <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} />
             <Area type="monotone" dataKey="distance" name={`${t('charts.distance')} (${units.distUnit})`} stroke="#f59e0b" fill="#f59e0b44" strokeWidth={2} />
           </AreaChart>
@@ -50,7 +50,7 @@ export function PatternsTab({
             <AreaChart data={data.hourData}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="hour" stroke={chartColors.axis} fontSize={11} />
-              <YAxis stroke={chartColors.axis} fontSize={11} />
+              <YAxis stroke={chartColors.axis} fontSize={11} width={40} />
               <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} />
               <Area type="monotone" dataKey="trips" name={t('charts.trips')} stroke="#3b82f6" fill="#3b82f644" strokeWidth={2} />
             </AreaChart>
@@ -61,8 +61,8 @@ export function PatternsTab({
             <ComposedChart data={convertedDayData}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="day" stroke={chartColors.axis} fontSize={11} />
-              <YAxis yAxisId="left" stroke={chartColors.axis} fontSize={11} />
-              <YAxis yAxisId="right" orientation="right" stroke={chartColors.axis} fontSize={11} />
+              <YAxis yAxisId="left" stroke={chartColors.axis} fontSize={11} width={35} />
+              <YAxis yAxisId="right" orientation="right" stroke={chartColors.axis} fontSize={11} width={35} />
               <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} />
               <Legend />
               <Bar yAxisId="left" dataKey="trips" name={t('charts.trips')} fill="#8b5cf6" radius={[4, 4, 0, 0]} />
@@ -78,7 +78,7 @@ export function PatternsTab({
           <BarChart data={convertedDayData}>
             <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
             <XAxis dataKey="day" stroke={chartColors.axis} fontSize={11} />
-            <YAxis stroke={chartColors.axis} fontSize={11} />
+            <YAxis stroke={chartColors.axis} fontSize={11} width={40} />
             <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} />
             <Bar dataKey="avgDist" name={`${t('charts.average')} ${units.distUnit}/${t('common.trip')}`} fill="#3b82f6" radius={[4, 4, 0, 0]}>
               {convertedDayData.map((entry, i) => (

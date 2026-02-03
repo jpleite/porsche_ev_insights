@@ -1,6 +1,14 @@
 // ========== CHART HELPERS ==========
 
 /**
+ * Get Y-axis width configuration
+ * Returns narrower width for mobile screens to prevent chart stretching
+ */
+export function getYAxisWidth(isMobile = false) {
+  return isMobile ? 35 : 45;
+}
+
+/**
  * Get X-axis configuration for time-based charts
  * Returns interval and angle settings based on timeView
  */

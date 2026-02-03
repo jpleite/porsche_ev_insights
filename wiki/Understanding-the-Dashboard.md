@@ -11,7 +11,7 @@ The dashboard uses a standard layout with three main areas:
 The top bar contains:
 
 - **App title** - "Porsche EV Insights"
-- **Version badge** - Shows the current version (e.g., "v1.3.0-beta")
+- **Version badge** - Shows the current version (e.g., "v2.0.0-beta")
 - **Vehicle badge** - Displays your selected or detected vehicle model
 - **Theme toggle** - Sun/moon icon to switch between light and dark modes
 
@@ -20,6 +20,7 @@ The top bar contains:
 The left sidebar provides navigation to all sections:
 
 - **Overview** - Summary dashboard (grid icon)
+- **My Car** - Live vehicle status (car icon) - only visible when connected to Porsche Connect
 - **Patterns** - Driving habits (clock icon)
 - **Efficiency** - Consumption analysis (lightning bolt icon)
 - **Costs** - Financial comparison (money icon)
@@ -60,6 +61,7 @@ Each tab serves a specific purpose:
 | Tab | Purpose |
 |-----|---------|
 | [Overview](Overview-Tab) | Quick summary of trips, distance, and energy |
+| [My Car](My-Car-Tab) | Live vehicle status via Porsche Connect (battery, location, tires) |
 | [Patterns](Patterns-Tab) | When you drive, day/time distributions |
 | [Efficiency](Efficiency-Tab) | Consumption trends, best/worst trips, speed impact |
 | [Costs](Costs-Tab) | Money saved vs. a petrol equivalent |

@@ -58,7 +58,8 @@ export const ja = {
     costs: 'コスト',
     environmental: '環境',
     battery: 'バッテリー',
-    insights: 'インサイト'
+    insights: 'インサイト',
+    myCar: 'マイカー'
   },
 
   // Sidebar
@@ -107,16 +108,50 @@ export const ja = {
     missingFileDesc: '続行するにはトリップデータをアップロードしてください。'
   },
 
+  // Porsche Connect
+  porscheConnect: {
+    title: 'Porsche Connect',
+    subtitle: '車両からのライブデータ',
+    checking: '接続を確認中...',
+    loginDescription: 'Porsche IDでサインインして、車両から直接トリップデータを同期します。',
+    email: 'Porsche ID（メール）',
+    password: 'パスワード',
+    login: 'サインイン',
+    loggingIn: 'サインイン中...',
+    logout: 'サインアウト',
+    privacyNote: '認証情報はPorscheに安全に送信され、保存されることはありません。',
+    selectVehicle: '同期する車両を選択:',
+    fetchData: 'トリップデータを同期',
+    loadingVehicles: '車両を読み込み中...',
+    loading: '読み込み中...',
+    noVehicles: 'Porsche Connectアカウントに車両が見つかりません。',
+    noTrips: 'トリップデータがありません。Porsche Connectを有効にして走行したことを確認してください。',
+    errorTitle: '接続エラー',
+    serverUnavailable: 'Porsche Connectプロキシサーバーが実行されていません。ライブデータ同期を有効にするには起動してください。',
+    serverInstructions: 'ターミナルで "cd server && npm install && npm start" を実行してから、再試行してください。',
+    syncComplete: '同期完了',
+    syncStats: '{model}から{new}件のトリップを同期しました。',
+    syncMergeStats: '{new}件の新しいトリップを追加（{duplicates}件の重複をスキップ）。合計: {total}件。',
+    sessionExpired: 'セッションの有効期限が切れました。再度サインインしてください。',
+    connected: '接続済み',
+    lastSync: '最終同期',
+    captchaDescription: 'Porscheは認証を必要としています。画像に表示されているテキストを入力してください。',
+    captchaLabel: '認証コード',
+    captchaPlaceholder: '上に表示されているテキストを入力',
+    verifyCaptcha: '認証',
+    verifying: '認証中...',
+    checkingForUpdates: '新しいトリップを確認中...',
+    syncing: 'トリップデータを同期中...',
+    newDataSynced: '新しいトリップを同期しました！'
+  },
+
   // Settings page
   settings: {
     title: '設定',
 
-    // Language section
-    language: '言語',
+    // Language & Units section
+    languageAndUnits: '言語と単位',
     languageLabel: '表示言語',
-
-    // Units & Currency section
-    unitsAndCurrency: '単位と通貨',
     unitSystem: '単位系',
     currency: '通貨',
     fuelConsumption: '燃費',
@@ -165,6 +200,14 @@ export const ja = {
     dataManagement: 'データ管理',
     uploadCsvFiles: 'CSVファイルをアップロード',
     clearAllData: 'すべてのデータを消去',
+
+    // Porsche Connect section
+    porscheConnect: 'Porsche Connect',
+    porscheConnected: 'Porscheに接続済み',
+    porscheConnectDesc: 'Porscheサーバーに接続して、トリップデータを自動的に同期します。',
+    connectToPorsche: 'Porscheに接続',
+    syncData: 'トリップデータを同期',
+    porscheLogout: '切断',
 
     // Backup & restore section
     backupRestore: 'バックアップと復元',
@@ -315,6 +358,7 @@ export const ja = {
     consumptionVsOfficial: '公式値との比較',
     seasonalVariation: '季節変動',
     chargesPerWeek: '週あたり充電回数',
+    energyPerCharge: '充電あたりエネルギー',
     chargingLosses: '充電ロス',
     offPeakSavings: '夜間電力節約',
     fullCycles: 'フルサイクル',
@@ -511,5 +555,40 @@ export const ja = {
     highwayCruiser: '高速道路',
     weekendDriver: '週末ドライバー',
     efficientDriver: '効率的ドライバー'
+  },
+
+  // My Car tab
+  myCar: {
+    noDataTitle: '車両が接続されていません',
+    noDataDesc: 'Porsche Connectに接続して、車両情報を表示してください。',
+    connectButton: 'ポルシェに接続',
+    vehiclePhotos: '車両写真',
+    lastKnownLocation: '最後の既知の位置',
+    locationUnavailable: '位置データが利用できません',
+    openInMaps: 'マップで開く',
+    heading: '方位',
+    batteryLevel: 'バッテリー残量',
+    estimatedRange: '推定航続距離',
+    totalMileage: '総走行距離',
+    electricRange: '電気航続距離',
+    vehicleDetails: '車両詳細',
+    model: 'モデル',
+    year: '年式',
+    generation: '世代',
+    steering: 'ステアリング',
+    leftHandDrive: '左ハンドル',
+    rightHandDrive: '右ハンドル',
+    locked: 'ロック済み',
+    unlocked: 'アンロック済み',
+    lastUpdated: '最終更新',
+    frontView: 'フロントビュー',
+    sideView: 'サイドビュー',
+    rearView: 'リアビュー',
+    topView: 'トップビュー',
+    tirePressure: 'タイヤ空気圧',
+    tireFL: '左前',
+    tireFR: '右前',
+    tireRL: '左後',
+    tireRR: '右後'
   }
 };

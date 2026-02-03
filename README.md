@@ -38,6 +38,7 @@ Now also supporting **Audi e-tron GT** - which shares the same J1 platform as th
 | Feature | Description |
 |---------|-------------|
 | **Overview Dashboard** | Total distance, consumption, trips, and key metrics |
+| **My Car (Live)** | Real-time vehicle status via Porsche Connect API (battery, location, tire pressure, photos) |
 | **Driving Patterns** | Analyze trips by hour, day of week, and month |
 | **Efficiency Analysis** | Consumption breakdown by speed ranges and conditions |
 | **Cost Calculator** | Track electricity costs with customizable rates |
@@ -243,6 +244,22 @@ Contributions are welcome! Feel free to:
 - Submit pull requests
 
 ## Release History
+
+### v2.0.0-beta (February 2026)
+- **Porsche silhouette branding**: New Porsche car icon throughout the app
+- **My Car tab always visible**: Connect prompt shown when not logged in
+- **Charge cycle deduplication fix**: Fixed trips/charge calculation after sync
+- **One-time data migration**: Automatically fixes corrupted charge data
+
+### v1.5.0-beta (February 2026)
+- **My Car Tab**: New live vehicle status page via Porsche Connect API
+- **Real-time battery**: See current battery level and estimated range
+- **Live location**: View your car's last known GPS location on an interactive map
+- **Tire pressure**: Monitor all four tire pressures at a glance
+- **Vehicle photos**: Browse official Porsche renders of your car in a carousel
+- **Lock status**: See if your vehicle is locked or unlocked
+- **Porsche Connect integration**: Secure OAuth login (requires local proxy server for development)
+- **Mobile optimized**: Charts now have narrower Y-axis padding for better mobile display
 
 ### v1.4.0-beta (February 2026)
 - **EPA/MPGe support**: US users now see EPA ratings instead of WLTP values

@@ -38,9 +38,12 @@ import { CostsTab } from './components/tabs/CostsTab';
 import { EnvironmentalTab } from './components/tabs/EnvironmentalTab';
 import { BatteryTab } from './components/tabs/BatteryTab';
 import { InsightsTab } from './components/tabs/InsightsTab';
+import { MyCarTab } from './components/tabs/MyCarTab';
 import { UploadModal } from './components/modals/UploadModal';
 import { ConfirmModal } from './components/modals/ConfirmModal';
+import { PorscheConnectModal } from './components/modals/PorscheConnectModal';
 import { WelcomeScreen, SettingsPage } from './pages';
+import { mapModelToVehicleId, getStoredSession, fetchAllData, getVehicles, getVehicleOverview, getVehiclePictures, getVehicleStatus } from './services/porscheConnect';
 
 // ========== MAIN COMPONENT ==========
 export default function App() {
@@ -67,6 +70,9 @@ export default function App() {
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const [uploadMode, setUploadMode] = useState('replace'); // 'replace' or 'merge'
   const [rawData, setRawData] = useState({ start: [], charge: [] }); // Raw CSV rows for merging
+  const [showPorscheConnect, setShowPorscheConnect] = useState(false); // Porsche Connect modal
+  const [autoSyncStatus, setAutoSyncStatus] = useState(null); // 'checking', 'syncing', 'done', 'new_data', null
+  const [liveVehicleData, setLiveVehicleData] = useState(null); // Live vehicle data from Porsche Connect API
   const [darkMode, setDarkMode] = useState(() => {
     const saved = safeStorage.get('taycan_theme');
     return saved !== null ? saved : true;
@@ -79,10 +85,36 @@ export default function App() {
   }, [darkMode]);
 
   useEffect(() => {
-    const savedData = safeStorage.get(STORAGE_KEYS.DATA);
+    let savedData = safeStorage.get(STORAGE_KEYS.DATA);
     const savedSettings = safeStorage.get(STORAGE_KEYS.SETTINGS);
     const savedModel = safeStorage.get(STORAGE_KEYS.VEHICLE_MODEL);
-    const savedRawData = safeStorage.get(STORAGE_KEYS.RAW_DATA);
+    let savedRawData = safeStorage.get(STORAGE_KEYS.RAW_DATA);
+
+    // One-time migration: deduplicate charge data that was corrupted by duplicate concatenation
+    // This migration can be removed after v2.0.0
+    const migrationKey = 'taycan_charge_dedupe_v1';
+    if (savedRawData?.charge?.length > 0 && !safeStorage.get(migrationKey)) {
+      const seen = new Set();
+      const deduped = savedRawData.charge.filter(cycle => {
+        const date = cycle.date instanceof Date ? cycle.date : new Date(cycle.date || cycle['arrival time']);
+        const fingerprint = `${date.toISOString().slice(0, 10)}|${cycle.distance}|${cycle.consumption}`;
+        if (seen.has(fingerprint)) return false;
+        seen.add(fingerprint);
+        return true;
+      });
+      if (deduped.length < savedRawData.charge.length) {
+        console.log(`[Migration] Deduplicated charge data: ${savedRawData.charge.length} → ${deduped.length}`);
+        savedRawData = { ...savedRawData, charge: deduped };
+        safeStorage.set(STORAGE_KEYS.RAW_DATA, savedRawData);
+        // Reprocess data with corrected charge count
+        if (savedRawData.start?.length > 0) {
+          savedData = processUploadedData(savedRawData.start, savedRawData.charge);
+          safeStorage.set(STORAGE_KEYS.DATA, savedData);
+        }
+      }
+      safeStorage.set(migrationKey, true);
+    }
+
     if (savedData) setAppData(savedData);
     if (savedModel) setVehicleModel(savedModel);
     if (savedRawData) setRawData(savedRawData);
@@ -102,6 +134,230 @@ export default function App() {
   useEffect(() => {
     safeStorage.set(STORAGE_KEYS.SETTINGS, { electricityPrice, petrolPrice, petrolConsumption, batteryCapacity, unitSystem, currency, fuelConsFormat, elecConsFormat, selectedVehicleId });
   }, [electricityPrice, petrolPrice, petrolConsumption, batteryCapacity, unitSystem, currency, fuelConsFormat, elecConsFormat, selectedVehicleId]);
+
+  // Auto-sync with Porsche Connect on page load (background)
+  useEffect(() => {
+    const autoSync = async () => {
+      // Only sync if user has an active session and existing data
+      const session = getStoredSession();
+      if (!session || rawData.start.length === 0) return;
+
+      try {
+        setAutoSyncStatus('checking');
+
+        // Get vehicles to find the VIN
+        const vehicles = await getVehicles();
+        if (!vehicles || vehicles.length === 0) {
+          setAutoSyncStatus(null);
+          return;
+        }
+
+        const vin = vehicles[0].vin;
+        setAutoSyncStatus('syncing');
+
+        // Fetch latest data
+        const { trips, chargeData } = await fetchAllData(vin, () => {});
+
+        if (trips.length === 0) {
+          setAutoSyncStatus(null);
+          return;
+        }
+
+        // Check for new trips using fingerprint comparison
+        const existingFingerprints = new Set(
+          rawData.start.map(trip => {
+            const date = trip.date instanceof Date ? trip.date : new Date(trip.date);
+            return `${date.toISOString().slice(0, 10)}|${trip.distance}|${trip.consumption}`;
+          })
+        );
+
+        const newTrips = trips.filter(trip => {
+          const date = trip.date instanceof Date ? trip.date : new Date(trip.date);
+          const fingerprint = `${date.toISOString().slice(0, 10)}|${trip.distance}|${trip.consumption}`;
+          return !existingFingerprints.has(fingerprint);
+        });
+
+        if (newTrips.length > 0) {
+          // Merge new trips with existing data
+          const mergedTrips = [...rawData.start, ...newTrips];
+
+          // Deduplicate charge data using fingerprint (same logic as trips)
+          let mergedChargeData = rawData.charge;
+          if (chargeData.length > 0) {
+            const existingChargeFingerprints = new Set(
+              rawData.charge.map(cycle => {
+                const date = cycle.date instanceof Date ? cycle.date : new Date(cycle.date || cycle['arrival time']);
+                return `${date.toISOString().slice(0, 10)}|${cycle.distance}|${cycle.consumption}`;
+              })
+            );
+            const newChargeCycles = chargeData.filter(cycle => {
+              const date = cycle.date instanceof Date ? cycle.date : new Date(cycle.date || cycle['arrival time']);
+              const fingerprint = `${date.toISOString().slice(0, 10)}|${cycle.distance}|${cycle.consumption}`;
+              return !existingChargeFingerprints.has(fingerprint);
+            });
+            mergedChargeData = [...rawData.charge, ...newChargeCycles];
+          }
+
+          // Update state and storage
+          const newRawData = { start: mergedTrips, charge: mergedChargeData };
+          setRawData(newRawData);
+          safeStorage.set(STORAGE_KEYS.RAW_DATA, newRawData);
+
+          const processed = processUploadedData(mergedTrips, mergedChargeData);
+          setAppData(processed);
+          safeStorage.set(STORAGE_KEYS.DATA, processed);
+
+          setAutoSyncStatus('new_data');
+          // Show notification briefly, then hide
+          setTimeout(() => setAutoSyncStatus(null), 5000);
+        } else {
+          setAutoSyncStatus(null);
+        }
+      } catch (error) {
+        console.warn('Auto-sync failed:', error);
+        setAutoSyncStatus(null);
+      }
+    };
+
+    // Delay auto-sync to not block initial render
+    const timer = setTimeout(autoSync, 2000);
+    return () => clearTimeout(timer);
+  }, []); // Only run once on mount
+
+  // Fetch live vehicle data for My Car tab when session exists
+  useEffect(() => {
+    const fetchLiveVehicleData = async () => {
+      const session = getStoredSession();
+      if (!session) {
+        setLiveVehicleData(null);
+        return;
+      }
+
+      try {
+        const vehicles = await getVehicles();
+        if (!vehicles || vehicles.length === 0) {
+          setLiveVehicleData(null);
+          return;
+        }
+
+        const vehicle = vehicles[0];
+        const vin = vehicle.vin;
+
+        // Fetch overview, full status, and pictures in parallel
+        const [overview, fullStatus, pictures] = await Promise.all([
+          getVehicleOverview(vin).catch(() => null),
+          getVehicleStatus(vin).catch(() => null),
+          getVehiclePictures(vin).catch(() => null)
+        ]);
+
+        // Extract status measurements from both overview and full status
+        // Full status may contain additional data like tire pressure
+        const overviewMeasurements = overview?.measurements || [];
+        const statusMeasurements = fullStatus?.measurements || [];
+        const allMeasurements = [...overviewMeasurements, ...statusMeasurements];
+        const getMeasurement = (key) => allMeasurements.find(m => m.key === key);
+
+        // Get tire pressure data (single measurement with all 4 tires)
+        const tirePressureData = getMeasurement('TIRE_PRESSURE')?.value;
+        console.log('[My Car] Tire pressure data:', tirePressureData);
+
+        const status = {
+          batteryLevel: getMeasurement('BATTERY_LEVEL')?.value,
+          range: {
+            kilometers: getMeasurement('E_RANGE')?.value?.valueInKilometers ||
+                       getMeasurement('E_RANGE')?.value?.kilometers
+          },
+          mileage: {
+            kilometers: getMeasurement('MILEAGE')?.value?.valueInKilometers ||
+                       getMeasurement('MILEAGE')?.value?.kilometers
+          },
+          lockState: getMeasurement('LOCK_STATE_VEHICLE')?.value,
+          gpsLocation: getMeasurement('GPS_LOCATION')?.value,
+          tirePressure: tirePressureData ? {
+            frontLeft: tirePressureData.frontLeftTire?.actualPressureBar,
+            frontRight: tirePressureData.frontRightTire?.actualPressureBar,
+            rearLeft: tirePressureData.rearLeftTire?.actualPressureBar,
+            rearRight: tirePressureData.rearRightTire?.actualPressureBar
+          } : null
+        };
+
+        // Extract picture URLs - log the structure to help debug
+        console.log('[My Car] Pictures API response:', pictures);
+        const pictureData = {};
+
+        // Handle array format (API returns array of picture objects)
+        if (Array.isArray(pictures)) {
+          for (const pic of pictures) {
+            const view = pic.view || pic.perspective || '';
+            const url = pic.url;
+            if (!url) continue;
+
+            // Match various view naming conventions
+            if (view.includes('front') || view === 'ext-low-front-left') {
+              pictureData.frontView = url;
+            } else if (view.includes('side') || view === 'ext-low-side-left') {
+              pictureData.sideView = url;
+            } else if (view.includes('rear') || view === 'ext-low-rear-left') {
+              pictureData.rearView = url;
+            } else if (view.includes('top') || view === 'ext-top-right') {
+              pictureData.topView = url;
+            }
+          }
+        }
+
+        // Try gallery format
+        if (pictures?.gallery && Array.isArray(pictures.gallery)) {
+          for (const pic of pictures.gallery) {
+            if (pic.view === 'exterieur' && pic.angle === 'front') {
+              pictureData.frontView = pic.url;
+            } else if (pic.view === 'exterieur' && pic.angle === 'side') {
+              pictureData.sideView = pic.url;
+            } else if (pic.view === 'exterieur' && pic.angle === 'rear') {
+              pictureData.rearView = pic.url;
+            } else if (pic.view === 'exterieur' && pic.angle === 'top') {
+              pictureData.topView = pic.url;
+            }
+          }
+        }
+
+        // Try direct URL fields (e.g., pictures.frontView, pictures.sideView)
+        if (pictures?.frontView) pictureData.frontView = pictures.frontView;
+        if (pictures?.sideView) pictureData.sideView = pictures.sideView;
+        if (pictures?.rearView) pictureData.rearView = pictures.rearView;
+        if (pictures?.topView) pictureData.topView = pictures.topView;
+
+        // Try nested format (e.g., pictures.pictures.frontView)
+        if (pictures?.pictures) {
+          if (pictures.pictures.frontView) pictureData.frontView = pictures.pictures.frontView;
+          if (pictures.pictures.sideView) pictureData.sideView = pictures.pictures.sideView;
+          if (pictures.pictures.rearView) pictureData.rearView = pictures.pictures.rearView;
+          if (pictures.pictures.topView) pictureData.topView = pictures.pictures.topView;
+        }
+
+        // Try exteriorViews format
+        if (pictures?.exteriorViews) {
+          const views = pictures.exteriorViews;
+          if (views.front) pictureData.frontView = views.front;
+          if (views.side) pictureData.sideView = views.side;
+          if (views.rear) pictureData.rearView = views.rear;
+          if (views.top) pictureData.topView = views.top;
+        }
+
+        console.log('[My Car] Extracted picture data:', pictureData);
+
+        setLiveVehicleData({
+          vehicle,
+          status,
+          pictures: pictureData
+        });
+      } catch (error) {
+        console.warn('Failed to fetch live vehicle data:', error);
+        setLiveVehicleData(null);
+      }
+    };
+
+    fetchLiveVehicleData();
+  }, [showPorscheConnect]); // Re-fetch when modal closes (user may have logged in)
 
   // Reset consumption formats and currency when unit system changes
   useEffect(() => {
@@ -1006,6 +1262,114 @@ export default function App() {
     });
   }, []);
 
+  // Handle Porsche Connect data import
+  const handlePorscheConnectData = useCallback(({ trips, chargeData = [], vehicleInfo }) => {
+    let finalData = trips;
+    let finalChargeData = chargeData;
+    let mergeStats = null;
+
+    // Check if we should merge with existing data
+    if (rawData.start.length > 0) {
+      const existingFingerprints = new Set(
+        rawData.start.map(trip => {
+          const date = trip.date instanceof Date ? trip.date : new Date(trip.date);
+          return `${date.toISOString().slice(0, 10)}|${trip.distance}|${trip.consumption}`;
+        })
+      );
+
+      const newTrips = [];
+      let duplicates = 0;
+
+      for (const trip of trips) {
+        const date = trip.date instanceof Date ? trip.date : new Date(trip.date);
+        const fingerprint = `${date.toISOString().slice(0, 10)}|${trip.distance}|${trip.consumption}`;
+
+        if (existingFingerprints.has(fingerprint)) {
+          duplicates++;
+        } else {
+          newTrips.push(trip);
+          existingFingerprints.add(fingerprint);
+        }
+      }
+
+      finalData = [...rawData.start, ...newTrips];
+      mergeStats = { new: newTrips.length, duplicates, total: finalData.length };
+
+      // Deduplicate charge data using fingerprint (same logic as trips)
+      if (rawData.charge.length > 0 && chargeData.length > 0) {
+        const existingChargeFingerprints = new Set(
+          rawData.charge.map(cycle => {
+            const date = cycle.date instanceof Date ? cycle.date : new Date(cycle.date || cycle['arrival time']);
+            return `${date.toISOString().slice(0, 10)}|${cycle.distance}|${cycle.consumption}`;
+          })
+        );
+        const newChargeCycles = chargeData.filter(cycle => {
+          const date = cycle.date instanceof Date ? cycle.date : new Date(cycle.date || cycle['arrival time']);
+          const fingerprint = `${date.toISOString().slice(0, 10)}|${cycle.distance}|${cycle.consumption}`;
+          return !existingChargeFingerprints.has(fingerprint);
+        });
+        finalChargeData = [...rawData.charge, ...newChargeCycles];
+      } else if (rawData.charge.length > 0) {
+        finalChargeData = rawData.charge;
+      }
+    }
+
+    // Store raw data for future merges
+    const newRawData = { start: finalData, charge: finalChargeData };
+    setRawData(newRawData);
+    safeStorage.set(STORAGE_KEYS.RAW_DATA, newRawData);
+
+    // Process and store the computed data
+    const processed = processUploadedData(finalData, finalChargeData);
+    setAppData(processed);
+    safeStorage.set(STORAGE_KEYS.DATA, processed);
+
+    // Set vehicle model from API data
+    const model = vehicleInfo.modelName || 'Porsche';
+    setVehicleModel(model);
+    safeStorage.set(STORAGE_KEYS.VEHICLE_MODEL, model);
+
+    // Auto-detect vehicle from API info
+    // Pass modelYear and batteryCapacity for more accurate matching
+    const vehicleId = mapModelToVehicleId(
+      vehicleInfo.modelName,
+      vehicleInfo.engineType,
+      vehicleInfo.modelYear,
+      vehicleInfo.batteryCapacity  // Gross battery capacity from API
+    );
+    if (vehicleId) {
+      setSelectedVehicleId(vehicleId);
+      safeStorage.set(STORAGE_KEYS.VEHICLE_ID, vehicleId);
+      const vehicle = getVehicleById(vehicleId);
+      if (vehicle) {
+        setBatteryCapacity(vehicle.usableBattery);
+        safeStorage.set(STORAGE_KEYS.BATTERY_CAPACITY, vehicle.usableBattery);
+      }
+    }
+
+    // Show results
+    if (mergeStats) {
+      setModalConfig({
+        title: t('porscheConnect.syncComplete'),
+        message: t('porscheConnect.syncMergeStats', {
+          new: mergeStats.new,
+          duplicates: mergeStats.duplicates,
+          total: mergeStats.total
+        }),
+        variant: 'success'
+      });
+    } else {
+      setModalConfig({
+        title: t('porscheConnect.syncComplete'),
+        message: t('porscheConnect.syncStats', {
+          new: trips.length,
+          model: vehicleInfo.modelName || 'Porsche'
+        }),
+        variant: 'success'
+      });
+    }
+  }, [rawData, t]);
+
   // Chart theme colors
   const chartColors = {
     grid: darkMode ? '#3f3f46' : '#e4e4e7',
@@ -1023,6 +1387,42 @@ export default function App() {
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
       />
+
+      {/* Auto-sync Status Indicator */}
+      {autoSyncStatus && (
+        <div className={`fixed top-16 right-4 z-50 px-3 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm transition-all ${
+          autoSyncStatus === 'new_data'
+            ? (darkMode ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-emerald-100 text-emerald-700 border border-emerald-200')
+            : (darkMode ? 'bg-zinc-800 text-zinc-300 border border-zinc-700' : 'bg-white text-zinc-600 border border-zinc-200')
+        }`}>
+          {autoSyncStatus === 'checking' && (
+            <>
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{t('porscheConnect.checkingForUpdates')}</span>
+            </>
+          )}
+          {autoSyncStatus === 'syncing' && (
+            <>
+              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{t('porscheConnect.syncing')}</span>
+            </>
+          )}
+          {autoSyncStatus === 'new_data' && (
+            <>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{t('porscheConnect.newDataSynced')}</span>
+            </>
+          )}
+        </div>
+      )}
 
       {/* Mobile Menu Overlay */}
       {menuOpen && (
@@ -1042,8 +1442,6 @@ export default function App() {
         showSettings={showSettings}
         setShowSettings={setShowSettings}
         setDarkMode={setDarkMode}
-        icons={icons}
-        tabs={tabs}
       />
 
       {/* Upload Modal */}
@@ -1070,6 +1468,15 @@ export default function App() {
         />
       )}
 
+      {/* Porsche Connect Modal */}
+      <PorscheConnectModal
+        darkMode={darkMode}
+        show={showPorscheConnect}
+        onClose={() => setShowPorscheConnect(false)}
+        onDataLoaded={handlePorscheConnectData}
+        onError={(error) => setModalConfig({ title: t('common.error'), message: error, variant: 'danger' })}
+      />
+
       {/* Main Layout Container */}
       <div className="flex flex-col lg:flex-row max-w-7xl mx-auto">
         {/* Desktop Sidebar */}
@@ -1080,8 +1487,6 @@ export default function App() {
           showSettings={showSettings}
           setShowSettings={setShowSettings}
           setDarkMode={setDarkMode}
-          icons={icons}
-          tabs={tabs}
         />
 
         {/* Main Content */}
@@ -1110,6 +1515,7 @@ export default function App() {
               selectedVehicleId={selectedVehicleId}
               setSelectedVehicleId={setSelectedVehicleId}
               setShowUpload={setShowUpload}
+              setShowPorscheConnect={setShowPorscheConnect}
               handleClearData={handleClearData}
               handleBackup={handleBackup}
               handleRestore={handleRestore}
@@ -1121,6 +1527,7 @@ export default function App() {
             <WelcomeScreen
               setShowUpload={setShowUpload}
               setUseSampleData={setUseSampleData}
+              setShowPorscheConnect={setShowPorscheConnect}
               darkMode={darkMode}
             />
           )}
@@ -1228,6 +1635,15 @@ export default function App() {
                   benchmarks={benchmarks}
                   chargingOptimization={chargingOptimization}
                   unitSystem={unitSystem}
+                />
+              )}
+
+              {activeTab === 'myCar' && (
+                <MyCarTab
+                  darkMode={darkMode}
+                  units={units}
+                  vehicleData={liveVehicleData}
+                  onConnect={() => setShowPorscheConnect(true)}
                 />
               )}
             </>

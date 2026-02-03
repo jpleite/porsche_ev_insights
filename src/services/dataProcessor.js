@@ -16,12 +16,19 @@ export function processUploadedData(sinceStartData, sinceChargeData) {
     return 'winter';
   };
 
+  // Helper to parse numeric values that may be strings (CSV) or numbers (API)
+  const parseNumeric = (value) => {
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') return parseFloat(value.replace(',', '.')) || 0;
+    return 0;
+  };
+
   const trips = sinceStartData.map(row => {
-    // Support multiple header formats (Portuguese and English)
-    const dateStr = row['arrival time'] || row['data de chegada'] || row['arrival date'] || '';
-    const distance = parseFloat((row['distance (km)'] || row['distância'] || row['distance'] || '0').replace(',', '.')) || 0;
-    const consumption = parseFloat((row['avg. consumption (kwh/100 km)'] || row['consumo'] || row['consumption'] || '0').replace(',', '.')) || 0;
-    const speed = parseFloat((row['average speed (km/h)'] || row['velocidade média'] || row['average speed'] || '0').replace(',', '.')) || 0;
+    // Support multiple header formats (Portuguese and English) and API format
+    const rawDate = row['arrival time'] || row['data de chegada'] || row['arrival date'] || row.date || '';
+    const distance = parseNumeric(row['distance (km)'] || row['distância'] || row['distance'] || 0);
+    const consumption = parseNumeric(row['avg. consumption (kwh/100 km)'] || row['consumo'] || row['consumption'] || 0);
+    const speed = parseNumeric(row['average speed (km/h)'] || row['velocidade média'] || row['average speed'] || row['avgSpeed'] || 0);
 
     let hour = 12;
     let parsedDate = null;
@@ -29,27 +36,43 @@ export function processUploadedData(sinceStartData, sinceChargeData) {
     let weekKey = '';
     let monthKey = '';
     let season = '';
+    let dateStr = '';
 
-    // Handle ISO format: 2025-11-09T13:22:52Z
-    const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):/);
-    if (isoMatch) {
-      hour = parseInt(isoMatch[4]);
-      parsedDate = new Date(isoMatch[1], parseInt(isoMatch[2]) - 1, isoMatch[3]);
-      dateKey = `${isoMatch[1]}-${isoMatch[2]}-${isoMatch[3]}`;
-      monthKey = `${isoMatch[1]}-${isoMatch[2]}`;
-      weekKey = getWeekNumber(parsedDate);
-      season = getSeason(parseInt(isoMatch[2]));
+    // Handle Date objects from API
+    if (rawDate instanceof Date) {
+      parsedDate = rawDate;
+      hour = rawDate.getHours();
+      const year = rawDate.getFullYear();
+      const month = String(rawDate.getMonth() + 1).padStart(2, '0');
+      const day = String(rawDate.getDate()).padStart(2, '0');
+      dateKey = `${year}-${month}-${day}`;
+      monthKey = `${year}-${month}`;
+      weekKey = getWeekNumber(rawDate);
+      season = getSeason(rawDate.getMonth() + 1);
+      dateStr = rawDate.toISOString();
     } else {
-      // Handle Portuguese format: dd/mm/yyyy HH:MM
-      const timeMatch = dateStr.match(/(\d{1,2}):\d{2}/);
-      if (timeMatch) hour = parseInt(timeMatch[1]);
-      const dateMatch = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-      if (dateMatch) {
-        parsedDate = new Date(dateMatch[3], parseInt(dateMatch[2]) - 1, dateMatch[1]);
-        dateKey = `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}`;
-        monthKey = `${dateMatch[3]}-${dateMatch[2]}`;
+      dateStr = rawDate;
+      // Handle ISO format: 2025-11-09T13:22:52Z
+      const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):/);
+      if (isoMatch) {
+        hour = parseInt(isoMatch[4]);
+        parsedDate = new Date(isoMatch[1], parseInt(isoMatch[2]) - 1, isoMatch[3]);
+        dateKey = `${isoMatch[1]}-${isoMatch[2]}-${isoMatch[3]}`;
+        monthKey = `${isoMatch[1]}-${isoMatch[2]}`;
         weekKey = getWeekNumber(parsedDate);
-        season = getSeason(parseInt(dateMatch[2]));
+        season = getSeason(parseInt(isoMatch[2]));
+      } else {
+        // Handle Portuguese format: dd/mm/yyyy HH:MM
+        const timeMatch = dateStr.match(/(\d{1,2}):\d{2}/);
+        if (timeMatch) hour = parseInt(timeMatch[1]);
+        const dateMatch = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+        if (dateMatch) {
+          parsedDate = new Date(dateMatch[3], parseInt(dateMatch[2]) - 1, dateMatch[1]);
+          dateKey = `${dateMatch[3]}-${dateMatch[2]}-${dateMatch[1]}`;
+          monthKey = `${dateMatch[3]}-${dateMatch[2]}`;
+          weekKey = getWeekNumber(parsedDate);
+          season = getSeason(parseInt(dateMatch[2]));
+        }
       }
     }
 
@@ -100,20 +123,9 @@ export function processUploadedData(sinceStartData, sinceChargeData) {
   const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const dayMap = {};
   trips.forEach(t => {
-    let d = null;
-    // Try ISO format first: 2025-11-09T13:22:52Z
-    const isoMatch = t.date.match(/^(\d{4})-(\d{2})-(\d{2})T/);
-    if (isoMatch) {
-      d = new Date(isoMatch[1], parseInt(isoMatch[2]) - 1, isoMatch[3]);
-    } else {
-      // Try Portuguese format: dd/mm/yyyy
-      const dateMatch = t.date.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-      if (dateMatch) {
-        d = new Date(dateMatch[3], parseInt(dateMatch[2]) - 1, dateMatch[1]);
-      }
-    }
-    if (d) {
-      const dayName = dayNames[d.getDay()];
+    // Use the already-parsed date
+    if (t.parsedDate) {
+      const dayName = dayNames[t.parsedDate.getDay()];
       if (!dayMap[dayName]) dayMap[dayName] = { day: dayName, trips: 0, distance: 0, totalConsumption: 0 };
       dayMap[dayName].trips++;
       dayMap[dayName].distance = precise.add(dayMap[dayName].distance, t.distance);
@@ -149,15 +161,24 @@ export function processUploadedData(sinceStartData, sinceChargeData) {
   // Use lowercase keys for translation lookup
   const monthKeys = ['', 'jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
-  const getMonthInfo = (dateStr) => {
+  const getMonthInfo = (dateInput) => {
+    // Handle Date objects
+    if (dateInput instanceof Date) {
+      const year = dateInput.getFullYear();
+      const month = String(dateInput.getMonth() + 1).padStart(2, '0');
+      const monthNum = dateInput.getMonth() + 1;
+      return { key: `${year}-${month}`, name: monthKeys[monthNum] };
+    }
+    // Handle strings
+    const dateStr = dateInput || '';
     // Try ISO format: 2025-11-09T13:22:52Z
-    const isoMatch = dateStr.match(/^(\d{4})-(\d{2})-\d{2}T/);
+    const isoMatch = dateStr.match?.(/^(\d{4})-(\d{2})-\d{2}T/);
     if (isoMatch) {
       const monthNum = parseInt(isoMatch[2]);
       return { key: `${isoMatch[1]}-${isoMatch[2]}`, name: monthKeys[monthNum] };
     }
     // Try Portuguese format: dd/mm/yyyy
-    const dateMatch = dateStr.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+    const dateMatch = dateStr.match?.(/(\d{2})\/(\d{2})\/(\d{4})/);
     if (dateMatch) {
       const monthNum = parseInt(dateMatch[2]);
       return { key: `${dateMatch[3]}-${dateMatch[2]}`, name: monthKeys[monthNum] };
@@ -166,20 +187,23 @@ export function processUploadedData(sinceStartData, sinceChargeData) {
   };
 
   trips.forEach(t => {
-    const monthInfo = getMonthInfo(t.date);
-    if (monthInfo) {
-      if (!monthMap[monthInfo.key]) monthMap[monthInfo.key] = { key: monthInfo.key, month: monthInfo.name, trips: 0, distance: 0, totalConsumption: 0 };
-      monthMap[monthInfo.key].trips++;
-      monthMap[monthInfo.key].distance = precise.add(monthMap[monthInfo.key].distance, t.distance);
-      monthMap[monthInfo.key].totalConsumption = precise.add(monthMap[monthInfo.key].totalConsumption, t.consumption);
+    // Use already-computed monthKey and month name from season
+    if (t.monthKey) {
+      const monthNum = parseInt(t.monthKey.split('-')[1]);
+      const monthName = monthKeys[monthNum];
+      if (!monthMap[t.monthKey]) monthMap[t.monthKey] = { key: t.monthKey, month: monthName, trips: 0, distance: 0, totalConsumption: 0 };
+      monthMap[t.monthKey].trips++;
+      monthMap[t.monthKey].distance = precise.add(monthMap[t.monthKey].distance, t.distance);
+      monthMap[t.monthKey].totalConsumption = precise.add(monthMap[t.monthKey].totalConsumption, t.consumption);
     }
   });
 
   const chargeCycles = sinceChargeData.length;
   const chargeMonthMap = {};
   sinceChargeData.forEach(row => {
-    const dateStr = row['arrival time'] || row['data de chegada'] || row['arrival date'] || '';
-    const monthInfo = getMonthInfo(dateStr);
+    // Handle both Date objects (from API) and strings (from CSV)
+    const dateValue = row.date || row['arrival time'] || row['data de chegada'] || row['arrival date'] || '';
+    const monthInfo = getMonthInfo(dateValue);
     if (monthInfo) {
       chargeMonthMap[monthInfo.key] = (chargeMonthMap[monthInfo.key] || 0) + 1;
     }

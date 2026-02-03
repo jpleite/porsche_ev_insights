@@ -58,7 +58,8 @@ export const pl = {
     costs: 'Koszty',
     environmental: 'Środowisko',
     battery: 'Bateria',
-    insights: 'Analizy'
+    insights: 'Analizy',
+    myCar: 'Mój Samochód'
   },
 
   // Sidebar
@@ -107,16 +108,50 @@ export const pl = {
     missingFileDesc: 'Prześlij dane o podróżach aby kontynuować.'
   },
 
+  // Porsche Connect
+  porscheConnect: {
+    title: 'Porsche Connect',
+    subtitle: 'Dane na żywo z Twojego pojazdu',
+    checking: 'Sprawdzanie połączenia...',
+    loginDescription: 'Zaloguj się za pomocą Porsche ID, aby synchronizować dane o podróżach bezpośrednio z pojazdu.',
+    email: 'Porsche ID (Email)',
+    password: 'Hasło',
+    login: 'Zaloguj się',
+    loggingIn: 'Logowanie...',
+    logout: 'Wyloguj się',
+    privacyNote: 'Twoje dane logowania są bezpiecznie wysyłane do Porsche i nigdy nie są przechowywane.',
+    selectVehicle: 'Wybierz pojazd do synchronizacji:',
+    fetchData: 'Synchronizuj dane o podróżach',
+    loadingVehicles: 'Ładowanie pojazdów...',
+    loading: 'Ładowanie...',
+    noVehicles: 'Nie znaleziono pojazdów na Twoim koncie Porsche Connect.',
+    noTrips: 'Brak danych o podróżach. Upewnij się, że odbywałeś podróże z włączonym Porsche Connect.',
+    errorTitle: 'Błąd połączenia',
+    serverUnavailable: 'Serwer proxy Porsche Connect nie jest uruchomiony. Uruchom go, aby włączyć synchronizację danych na żywo.',
+    serverInstructions: 'Uruchom "cd server && npm install && npm start" w terminalu, a następnie spróbuj ponownie.',
+    syncComplete: 'Synchronizacja zakończona',
+    syncStats: 'Zsynchronizowano {new} podróży z Twojego {model}.',
+    syncMergeStats: 'Dodano {new} nowych podróży ({duplicates} duplikatów pominięto). Łącznie: {total} podróży.',
+    sessionExpired: 'Twoja sesja wygasła. Zaloguj się ponownie.',
+    connected: 'Połączono',
+    lastSync: 'Ostatnia synchronizacja',
+    captchaDescription: 'Porsche wymaga weryfikacji. Wprowadź tekst pokazany na obrazku.',
+    captchaLabel: 'Kod weryfikacyjny',
+    captchaPlaceholder: 'Wprowadź tekst pokazany powyżej',
+    verifyCaptcha: 'Zweryfikuj',
+    verifying: 'Weryfikowanie...',
+    checkingForUpdates: 'Szukanie nowych podróży...',
+    syncing: 'Synchronizowanie danych o podróżach...',
+    newDataSynced: 'Nowe podróże zsynchronizowane!'
+  },
+
   // Settings page
   settings: {
     title: 'Ustawienia',
 
-    // Language section
-    language: 'Język',
+    // Language & Units section
+    languageAndUnits: 'Język i jednostki',
     languageLabel: 'Język wyświetlania',
-
-    // Units & Currency section
-    unitsAndCurrency: 'Jednostki i waluta',
     unitSystem: 'System jednostek',
     currency: 'Waluta',
     fuelConsumption: 'Zużycie paliwa',
@@ -165,6 +200,14 @@ export const pl = {
     dataManagement: 'Zarządzanie danymi',
     uploadCsvFiles: 'Prześlij pliki CSV',
     clearAllData: 'Usuń wszystkie dane',
+
+    // Porsche Connect section
+    porscheConnect: 'Porsche Connect',
+    porscheConnected: 'Połączono z Porsche',
+    porscheConnectDesc: 'Połącz się z serwerami Porsche, aby automatycznie synchronizować dane o podróżach.',
+    connectToPorsche: 'Połącz z Porsche',
+    syncData: 'Synchronizuj dane o podróżach',
+    porscheLogout: 'Rozłącz',
 
     // Backup & restore section
     backupRestore: 'Kopia zapasowa i przywracanie',
@@ -315,6 +358,7 @@ export const pl = {
     consumptionVsOfficial: 'vs Oficjalne',
     seasonalVariation: 'Zmienność sezonowa',
     chargesPerWeek: 'Ładowań na tydzień',
+    energyPerCharge: 'Energia/Ładowanie',
     chargingLosses: 'Straty ładowania',
     offPeakSavings: 'Oszcz. taryfa nocna',
     fullCycles: 'Pełne cykle',
@@ -511,5 +555,40 @@ export const pl = {
     highwayCruiser: 'Autostradowiec',
     weekendDriver: 'Kierowca Weekendowy',
     efficientDriver: 'Wydajny Kierowca'
+  },
+
+  // My Car tab
+  myCar: {
+    noDataTitle: 'Brak połączonego pojazdu',
+    noDataDesc: 'Połącz się z Porsche Connect, aby wyświetlić informacje o pojeździe.',
+    connectButton: 'Połącz z Porsche',
+    vehiclePhotos: 'Zdjęcia pojazdu',
+    lastKnownLocation: 'Ostatnia znana lokalizacja',
+    locationUnavailable: 'Dane lokalizacji niedostępne',
+    openInMaps: 'Otwórz w Mapach',
+    heading: 'Kierunek',
+    batteryLevel: 'Poziom baterii',
+    estimatedRange: 'Szacowany zasięg',
+    totalMileage: 'Całkowity przebieg',
+    electricRange: 'Zasięg elektryczny',
+    vehicleDetails: 'Szczegóły pojazdu',
+    model: 'Model',
+    year: 'Rok',
+    generation: 'Generacja',
+    steering: 'Kierownica',
+    leftHandDrive: 'Kierownica po lewej',
+    rightHandDrive: 'Kierownica po prawej',
+    locked: 'Zablokowany',
+    unlocked: 'Odblokowany',
+    lastUpdated: 'Ostatnia aktualizacja',
+    frontView: 'Widok z przodu',
+    sideView: 'Widok z boku',
+    rearView: 'Widok z tyłu',
+    topView: 'Widok z góry',
+    tirePressure: 'Ciśnienie w Oponach',
+    tireFL: 'PL',
+    tireFR: 'PP',
+    tireRL: 'TL',
+    tireRR: 'TP'
   }
 };

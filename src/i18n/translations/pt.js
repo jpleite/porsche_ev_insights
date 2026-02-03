@@ -15,6 +15,7 @@ export const pt = {
     confirm: 'Confirmar',
     save: 'Guardar',
     close: 'Fechar',
+    back: 'Voltar',
     yes: 'Sim',
     no: 'Não',
     ok: 'OK',
@@ -38,7 +39,8 @@ export const pt = {
     min: 'min',
     hours: 'horas',
     minutes: 'minutos',
-    by: 'por'
+    by: 'por',
+    retry: 'Tentar novamente'
   },
 
   // Header
@@ -58,7 +60,8 @@ export const pt = {
     costs: 'Custos',
     environmental: 'Ambiental',
     battery: 'Bateria',
-    insights: 'Análises'
+    insights: 'Análises',
+    myCar: 'O Meu Carro'
   },
 
   // Sidebar
@@ -70,11 +73,51 @@ export const pt = {
   // Welcome screen
   welcome: {
     title: 'Bem-vindo ao Porsche EV Insights',
-    description: 'Carregue os seus ficheiros CSV do Porsche Connect para analisar os seus padrões de condução.',
-    uploadButton: 'Carregar Dados',
+    description: 'Conecte-se ao Porsche Connect ou carregue os seus ficheiros CSV para analisar os seus padrões de condução.',
+    connectButton: 'Conectar ao Porsche',
+    connectDesc: 'Dados em tempo real do Porsche Connect',
+    uploadButton: 'Carregar Ficheiros CSV',
     sampleButton: 'Experimentar Dados de Exemplo',
     privacyTitle: 'Privacidade Protegida',
-    privacyText: 'Todos os dados são processados localmente no seu navegador.'
+    privacyText: 'Todos os dados são processados localmente. Credenciais nunca são guardadas.'
+  },
+
+  // Porsche Connect integration
+  porscheConnect: {
+    title: 'Porsche Connect',
+    subtitle: 'Dados em tempo real do seu veículo',
+    checking: 'A verificar ligação...',
+    loginDescription: 'Inicie sessão com o seu Porsche ID para sincronizar dados de viagens diretamente do seu veículo.',
+    email: 'Porsche ID (Email)',
+    password: 'Palavra-passe',
+    login: 'Iniciar Sessão',
+    loggingIn: 'A iniciar sessão...',
+    logout: 'Terminar Sessão',
+    privacyNote: 'As suas credenciais são enviadas de forma segura para a Porsche e nunca são guardadas.',
+    selectVehicle: 'Selecione um veículo para sincronizar:',
+    fetchData: 'Sincronizar Viagens',
+    loadingVehicles: 'A carregar veículos...',
+    loading: 'A carregar...',
+    noVehicles: 'Nenhum veículo encontrado na sua conta Porsche Connect.',
+    noTrips: 'Nenhum dado de viagem disponível. Certifique-se de que fez viagens com o Porsche Connect ativo.',
+    errorTitle: 'Erro de Ligação',
+    serverUnavailable: 'O servidor proxy Porsche Connect não está em execução. Por favor inicie-o para ativar a sincronização de dados.',
+    serverInstructions: 'Execute "cd server && npm install && npm start" no terminal e tente novamente.',
+    syncComplete: 'Sincronização Completa',
+    syncStats: 'Sincronizadas {new} viagens do seu {model}.',
+    syncMergeStats: 'Adicionadas {new} novas viagens ({duplicates} duplicadas ignoradas). Total: {total} viagens.',
+    sessionExpired: 'A sua sessão expirou. Por favor inicie sessão novamente.',
+    connected: 'Conectado',
+    lastSync: 'Última sincronização',
+    captchaDescription: 'A Porsche requer verificação. Por favor introduza o texto mostrado na imagem abaixo.',
+    captchaLabel: 'Código de Verificação',
+    captchaPlaceholder: 'Introduza o texto mostrado acima',
+    verifyCaptcha: 'Verificar',
+    verifying: 'A verificar...',
+    // Auto-sync
+    checkingForUpdates: 'A verificar novas viagens...',
+    syncing: 'A sincronizar dados...',
+    newDataSynced: 'Novas viagens sincronizadas!'
   },
 
   // Upload modal
@@ -111,12 +154,9 @@ export const pt = {
   settings: {
     title: 'Definições',
 
-    // Language section
-    language: 'Idioma',
+    // Language & Units section
+    languageAndUnits: 'Idioma e Unidades',
     languageLabel: 'Idioma de Exibição',
-
-    // Units & Currency section
-    unitsAndCurrency: 'Unidades e Moeda',
     unitSystem: 'Sistema de Unidades',
     currency: 'Moeda',
     fuelConsumption: 'Consumo de Combustível',
@@ -165,6 +205,14 @@ export const pt = {
     dataManagement: 'Gestão de Dados',
     uploadCsvFiles: 'Carregar Ficheiros CSV',
     clearAllData: 'Limpar Todos os Dados',
+
+    // Porsche Connect section
+    porscheConnect: 'Porsche Connect',
+    porscheConnected: 'Ligado ao Porsche',
+    porscheConnectDesc: 'Ligue-se aos servidores Porsche para sincronizar automaticamente os dados das suas viagens.',
+    connectToPorsche: 'Ligar ao Porsche',
+    syncData: 'Sincronizar Dados',
+    porscheLogout: 'Desligar',
 
     // Backup & restore section
     backupRestore: 'Backup e Restauro',
@@ -315,6 +363,7 @@ export const pt = {
     consumptionVsOfficial: 'vs Oficial',
     seasonalVariation: 'Variação Sazonal',
     chargesPerWeek: 'Cargas por Semana',
+    energyPerCharge: 'Energia/Carga',
     chargingLosses: 'Perdas de Carregamento',
     offPeakSavings: 'Poupança Fora de Pico',
     fullCycles: 'Ciclos Completos',
@@ -511,5 +560,40 @@ export const pt = {
     highwayCruiser: 'Viajante de Autoestrada',
     weekendDriver: 'Condutor de Fim de Semana',
     efficientDriver: 'Condutor Eficiente'
+  },
+
+  // My Car tab
+  myCar: {
+    noDataTitle: 'Nenhum Veículo Conectado',
+    noDataDesc: 'Conecte ao Porsche Connect para ver as informações do seu veículo.',
+    connectButton: 'Conectar ao Porsche',
+    vehiclePhotos: 'Fotos do Veículo',
+    lastKnownLocation: 'Última Localização Conhecida',
+    locationUnavailable: 'Dados de localização indisponíveis',
+    openInMaps: 'Abrir no Mapa',
+    heading: 'Direção',
+    batteryLevel: 'Nível da Bateria',
+    estimatedRange: 'Autonomia Estimada',
+    totalMileage: 'Quilometragem Total',
+    electricRange: 'Autonomia Elétrica',
+    vehicleDetails: 'Detalhes do Veículo',
+    model: 'Modelo',
+    year: 'Ano',
+    generation: 'Geração',
+    steering: 'Volante',
+    leftHandDrive: 'Volante à Esquerda',
+    rightHandDrive: 'Volante à Direita',
+    locked: 'Trancado',
+    unlocked: 'Destrancado',
+    lastUpdated: 'Última atualização',
+    frontView: 'Vista Frontal',
+    sideView: 'Vista Lateral',
+    rearView: 'Vista Traseira',
+    topView: 'Vista Superior',
+    tirePressure: 'Pressão dos Pneus',
+    tireFL: 'DE',
+    tireFR: 'DD',
+    tireRL: 'TE',
+    tireRR: 'TD'
   }
 };

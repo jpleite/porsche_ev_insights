@@ -62,7 +62,7 @@ export function CostsTab({
             }))}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="month" stroke={chartColors.axis} fontSize={11} />
-              <YAxis stroke={chartColors.axis} fontSize={11} />
+              <YAxis stroke={chartColors.axis} fontSize={11} width={40} />
               <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} formatter={(v) => units.money(v)} />
               <Legend />
               <Bar dataKey="electricCost" name={`${t('costs.electricCost')} (${units.currSymbol})`} fill="#22c55e" radius={[4, 4, 0, 0]} />
@@ -82,7 +82,7 @@ export function CostsTab({
             }, [])}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="month" stroke={chartColors.axis} fontSize={11} />
-              <YAxis stroke={chartColors.axis} fontSize={11} />
+              <YAxis stroke={chartColors.axis} fontSize={11} width={40} />
               <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} formatter={(v) => units.money(v)} />
               <Area type="monotone" dataKey="cumulative" name={`${t('charts.savings')} (${units.currSymbol})`} stroke="#f59e0b" fill="#f59e0b44" strokeWidth={2} />
             </AreaChart>

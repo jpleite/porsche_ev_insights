@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { UNIT_SYSTEMS, CURRENCIES, FUEL_CONSUMPTION_FORMATS, ELECTRIC_CONSUMPTION_FORMATS } from '../constants/units';
 import { PORSCHE_EV_MODELS, getVehicleById, getVehiclesGrouped } from '../constants/porscheEvModels';
 import { useTranslation, SUPPORTED_LANGUAGES } from '../i18n';
+import { getStoredSession, logout } from '../services/porscheConnect';
 
 export function SettingsPage({
   darkMode,
@@ -24,11 +26,30 @@ export function SettingsPage({
   selectedVehicleId,
   setSelectedVehicleId,
   setShowUpload,
+  setShowPorscheConnect,
   handleClearData,
   handleBackup,
   handleRestore
 }) {
   const { t, language, setLanguage } = useTranslation();
+  const [porscheConnected, setPorscheConnected] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  // Check Porsche Connect session status
+  useEffect(() => {
+    setPorscheConnected(!!getStoredSession());
+  }, []);
+
+  // Handle Porsche Connect logout
+  const handlePorscheLogout = async () => {
+    setLoggingOut(true);
+    try {
+      await logout();
+      setPorscheConnected(false);
+    } finally {
+      setLoggingOut(false);
+    }
+  };
 
   // Get grouped vehicles for the dropdown
   const vehicleGroups = getVehiclesGrouped();
@@ -123,10 +144,22 @@ export function SettingsPage({
           </div>
         </div>
 
-        {/* Units & Currency */}
+        {/* Language & Units */}
         <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'}`}>
-          <h3 className={`text-sm font-semibold mb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{t('settings.unitsAndCurrency')}</h3>
+          <h3 className={`text-sm font-semibold mb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{t('settings.languageAndUnits')}</h3>
           <div className="space-y-3">
+            <div>
+              <label className={`block text-xs mb-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>{t('settings.languageLabel')}</label>
+              <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className={`w-full px-3 py-2 rounded-lg text-sm focus:border-sky-500 outline-none ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-zinc-50 border-zinc-300 text-zinc-900'} border`}
+              >
+                {SUPPORTED_LANGUAGES.map(lang => (
+                  <option key={lang.code} value={lang.code}>{lang.nativeName} ({lang.name})</option>
+                ))}
+              </select>
+            </div>
             <div>
               <label className={`block text-xs mb-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>{t('settings.unitSystem')}</label>
               <select value={unitSystem} onChange={(e) => setUnitSystem(e.target.value)} className={`w-full px-3 py-2 rounded-lg text-sm focus:border-sky-500 outline-none ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-zinc-50 border-zinc-300 text-zinc-900'} border`}>
@@ -198,25 +231,6 @@ export function SettingsPage({
           </div>
         </div>
 
-        {/* Language */}
-        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'}`}>
-          <h3 className={`text-sm font-semibold mb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{t('settings.language')}</h3>
-          <div className="space-y-3">
-            <div>
-              <label className={`block text-xs mb-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>{t('settings.languageLabel')}</label>
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-                className={`w-full px-3 py-2 rounded-lg text-sm focus:border-sky-500 outline-none ${darkMode ? 'bg-zinc-800 border-zinc-700 text-white' : 'bg-zinc-50 border-zinc-300 text-zinc-900'} border`}
-              >
-                {SUPPORTED_LANGUAGES.map(lang => (
-                  <option key={lang.code} value={lang.code}>{lang.nativeName} ({lang.name})</option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-
         {/* Data Management */}
         <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'}`}>
           <h3 className={`text-sm font-semibold mb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{t('settings.dataManagement')}</h3>
@@ -224,6 +238,58 @@ export function SettingsPage({
             <button onClick={() => setShowUpload(true)} className="w-full px-3 py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-white text-sm font-medium transition-colors"><span className="inline-flex items-center gap-2"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>{t('settings.uploadCsvFiles')}</span></button>
             {appData && (
               <button onClick={handleClearData} className="w-full px-3 py-2.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-medium border border-red-500/20 transition-colors">{t('settings.clearAllData')}</button>
+            )}
+          </div>
+        </div>
+
+        {/* Porsche Connect */}
+        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200 shadow-sm'}`}>
+          <h3 className={`text-sm font-semibold mb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{t('settings.porscheConnect')}</h3>
+          <div className="space-y-3">
+            {porscheConnected ? (
+              <>
+                <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${darkMode ? 'bg-emerald-500/10 text-emerald-400' : 'bg-emerald-50 text-emerald-600'}`}>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-sm">{t('settings.porscheConnected')}</span>
+                </div>
+                <button
+                  onClick={() => setShowPorscheConnect(true)}
+                  className={`w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${darkMode ? 'bg-zinc-800 hover:bg-zinc-700 text-white' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-900'}`}
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
+                    {t('settings.syncData')}
+                  </span>
+                </button>
+                <button
+                  onClick={handlePorscheLogout}
+                  disabled={loggingOut}
+                  className="w-full px-3 py-2.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 text-sm font-medium border border-red-500/20 transition-colors disabled:opacity-50"
+                >
+                  {loggingOut ? t('common.loading') : t('settings.porscheLogout')}
+                </button>
+              </>
+            ) : (
+              <>
+                <p className={`text-xs ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                  {t('settings.porscheConnectDesc')}
+                </p>
+                <button
+                  onClick={() => setShowPorscheConnect(true)}
+                  className="w-full px-3 py-2.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-white text-sm font-medium transition-colors"
+                >
+                  <span className="inline-flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                    </svg>
+                    {t('settings.connectToPorsche')}
+                  </span>
+                </button>
+              </>
             )}
           </div>
         </div>

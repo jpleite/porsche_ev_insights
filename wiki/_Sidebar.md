@@ -8,6 +8,7 @@
 ### Dashboard Guide
 - [Understanding the Dashboard](Understanding-the-Dashboard)
 - [Overview Tab](Overview-Tab)
+- [My Car Tab](My-Car-Tab)
 - [Patterns Tab](Patterns-Tab)
 - [Efficiency Tab](Efficiency-Tab)
 - [Costs Tab](Costs-Tab)

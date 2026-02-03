@@ -76,7 +76,7 @@ export function BatteryTab({
             <ComposedChart data={data.monthlyData.map(m => ({ ...m, month: t(`months.${m.month?.toLowerCase?.() || m.month}`), consumption: units.elecCons(m.consumption).value }))}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="month" stroke={chartColors.axis} fontSize={11} />
-              <YAxis stroke={chartColors.axis} fontSize={11} domain={elecConsDomain} />
+              <YAxis stroke={chartColors.axis} fontSize={11} width={40} domain={elecConsDomain} />
               <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} />
               <Legend />
               <Area type="monotone" dataKey="consumption" name={units.elecConsUnit} stroke="#8b5cf6" fill="#8b5cf644" strokeWidth={2} />
@@ -114,7 +114,7 @@ export function BatteryTab({
               <p className={`text-xl font-bold ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{chargingOptimization.chargesPerWeek}</p>
             </div>
             <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
-              <p className="text-xs text-zinc-500">{t('common.energy')}/Charge</p>
+              <p className="text-xs text-zinc-500">{t('battery.energyPerCharge')}</p>
               <p className={`text-xl font-bold ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{chargingOptimization.energyPerCharge} kWh</p>
             </div>
             <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>

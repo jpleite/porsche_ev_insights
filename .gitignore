@@ -25,3 +25,6 @@ dist-ssr
 
 # Claude
 .claude/
+
+# Server tokens (sensitive)
+server/.tokens.json

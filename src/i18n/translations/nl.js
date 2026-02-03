@@ -58,7 +58,8 @@ export const nl = {
     costs: 'Kosten',
     environmental: 'Milieu',
     battery: 'Batterij',
-    insights: 'Inzichten'
+    insights: 'Inzichten',
+    myCar: 'Mijn Auto'
   },
 
   // Sidebar
@@ -107,16 +108,50 @@ export const nl = {
     missingFileDesc: 'Upload ritgegevens om door te gaan.'
   },
 
+  // Porsche Connect
+  porscheConnect: {
+    title: 'Porsche Connect',
+    subtitle: 'Live gegevens van uw voertuig',
+    checking: 'Verbinding controleren...',
+    loginDescription: 'Log in met uw Porsche ID om ritgegevens rechtstreeks van uw voertuig te synchroniseren.',
+    email: 'Porsche ID (E-mail)',
+    password: 'Wachtwoord',
+    login: 'Inloggen',
+    loggingIn: 'Inloggen...',
+    logout: 'Uitloggen',
+    privacyNote: 'Uw inloggegevens worden veilig naar Porsche verzonden en worden nooit opgeslagen.',
+    selectVehicle: 'Selecteer een voertuig om te synchroniseren:',
+    fetchData: 'Ritgegevens synchroniseren',
+    loadingVehicles: 'Voertuigen laden...',
+    loading: 'Laden...',
+    noVehicles: 'Geen voertuigen gevonden in uw Porsche Connect-account.',
+    noTrips: 'Geen ritgegevens beschikbaar. Zorg ervoor dat u ritten heeft gemaakt met Porsche Connect ingeschakeld.',
+    errorTitle: 'Verbindingsfout',
+    serverUnavailable: 'De Porsche Connect proxy-server draait niet. Start deze om live datasynchronisatie in te schakelen.',
+    serverInstructions: 'Voer "cd server && npm install && npm start" uit in uw terminal en probeer opnieuw.',
+    syncComplete: 'Synchronisatie voltooid',
+    syncStats: '{new} ritten gesynchroniseerd van uw {model}.',
+    syncMergeStats: '{new} nieuwe ritten toegevoegd ({duplicates} duplicaten overgeslagen). Totaal: {total} ritten.',
+    sessionExpired: 'Uw sessie is verlopen. Log opnieuw in.',
+    connected: 'Verbonden',
+    lastSync: 'Laatst gesynchroniseerd',
+    captchaDescription: 'Porsche vereist verificatie. Voer de tekst in die in de afbeelding wordt getoond.',
+    captchaLabel: 'Verificatiecode',
+    captchaPlaceholder: 'Voer de hierboven getoonde tekst in',
+    verifyCaptcha: 'Verifiëren',
+    verifying: 'Verifiëren...',
+    checkingForUpdates: 'Nieuwe ritten zoeken...',
+    syncing: 'Ritgegevens synchroniseren...',
+    newDataSynced: 'Nieuwe ritten gesynchroniseerd!'
+  },
+
   // Settings page
   settings: {
     title: 'Instellingen',
 
-    // Language section
-    language: 'Taal',
+    // Language & Units section
+    languageAndUnits: 'Taal & eenheden',
     languageLabel: 'Weergavetaal',
-
-    // Units & Currency section
-    unitsAndCurrency: 'Eenheden & valuta',
     unitSystem: 'Eenhedensysteem',
     currency: 'Valuta',
     fuelConsumption: 'Brandstofverbruik',
@@ -165,6 +200,14 @@ export const nl = {
     dataManagement: 'Gegevensbeheer',
     uploadCsvFiles: 'CSV-bestanden uploaden',
     clearAllData: 'Alle gegevens wissen',
+
+    // Porsche Connect section
+    porscheConnect: 'Porsche Connect',
+    porscheConnected: 'Verbonden met Porsche',
+    porscheConnectDesc: 'Maak verbinding met Porsche-servers om uw ritgegevens automatisch te synchroniseren.',
+    connectToPorsche: 'Verbinden met Porsche',
+    syncData: 'Ritgegevens synchroniseren',
+    porscheLogout: 'Verbinding verbreken',
 
     // Backup & restore section
     backupRestore: 'Back-up & herstel',
@@ -315,6 +358,7 @@ export const nl = {
     consumptionVsOfficial: 'vs Officieel',
     seasonalVariation: 'Seizoensvariatie',
     chargesPerWeek: 'Laadsessies per week',
+    energyPerCharge: 'Energie/Laadsessie',
     chargingLosses: 'Laadverliezen',
     offPeakSavings: 'Nachtstroomkorting',
     fullCycles: 'Volledige cycli',
@@ -511,5 +555,40 @@ export const nl = {
     highwayCruiser: 'Snelwegrijder',
     weekendDriver: 'Weekendrijder',
     efficientDriver: 'Efficiënte Rijder'
+  },
+
+  // My Car tab
+  myCar: {
+    noDataTitle: 'Geen voertuig verbonden',
+    noDataDesc: 'Maak verbinding met Porsche Connect om uw voertuiginformatie te bekijken.',
+    connectButton: 'Verbinden met Porsche',
+    vehiclePhotos: 'Voertuigfoto\'s',
+    lastKnownLocation: 'Laatst bekende locatie',
+    locationUnavailable: 'Locatiegegevens niet beschikbaar',
+    openInMaps: 'Openen in Kaarten',
+    heading: 'Richting',
+    batteryLevel: 'Batterijniveau',
+    estimatedRange: 'Geschat bereik',
+    totalMileage: 'Totale kilometerstand',
+    electricRange: 'Elektrisch bereik',
+    vehicleDetails: 'Voertuigdetails',
+    model: 'Model',
+    year: 'Jaar',
+    generation: 'Generatie',
+    steering: 'Stuur',
+    leftHandDrive: 'Linksgestuurd',
+    rightHandDrive: 'Rechtsgestuurd',
+    locked: 'Vergrendeld',
+    unlocked: 'Ontgrendeld',
+    lastUpdated: 'Laatst bijgewerkt',
+    frontView: 'Vooraanzicht',
+    sideView: 'Zijaanzicht',
+    rearView: 'Achteraanzicht',
+    topView: 'Bovenaanzicht',
+    tirePressure: 'Bandenspanning',
+    tireFL: 'VL',
+    tireFR: 'VR',
+    tireRL: 'AL',
+    tireRR: 'AR'
   }
 };

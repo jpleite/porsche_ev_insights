@@ -58,7 +58,8 @@ export const zh = {
     costs: '成本',
     environmental: '环境',
     battery: '电池',
-    insights: '洞察'
+    insights: '洞察',
+    myCar: '我的车'
   },
 
   // Sidebar
@@ -107,16 +108,50 @@ export const zh = {
     missingFileDesc: '请上传行程数据以继续。'
   },
 
+  // Porsche Connect
+  porscheConnect: {
+    title: 'Porsche Connect',
+    subtitle: '来自您车辆的实时数据',
+    checking: '正在检查连接...',
+    loginDescription: '使用您的 Porsche ID 登录，直接从您的车辆同步行程数据。',
+    email: 'Porsche ID（电子邮件）',
+    password: '密码',
+    login: '登录',
+    loggingIn: '正在登录...',
+    logout: '登出',
+    privacyNote: '您的凭据会安全地发送到保时捷，绝不会被存储。',
+    selectVehicle: '选择要同步的车辆：',
+    fetchData: '同步行程数据',
+    loadingVehicles: '正在加载车辆...',
+    loading: '加载中...',
+    noVehicles: '在您的 Porsche Connect 账户中未找到车辆。',
+    noTrips: '没有可用的行程数据。请确保您已启用 Porsche Connect 进行过行程。',
+    errorTitle: '连接错误',
+    serverUnavailable: 'Porsche Connect 代理服务器未运行。请启动它以启用实时数据同步。',
+    serverInstructions: '在终端中运行 "cd server && npm install && npm start"，然后重试。',
+    syncComplete: '同步完成',
+    syncStats: '已从您的 {model} 同步 {new} 次行程。',
+    syncMergeStats: '已添加 {new} 次新行程（跳过 {duplicates} 个重复项）。总计：{total} 次行程。',
+    sessionExpired: '您的会话已过期。请重新登录。',
+    connected: '已连接',
+    lastSync: '上次同步',
+    captchaDescription: '保时捷需要验证。请输入图片中显示的文字。',
+    captchaLabel: '验证码',
+    captchaPlaceholder: '输入上方显示的文字',
+    verifyCaptcha: '验证',
+    verifying: '验证中...',
+    checkingForUpdates: '正在检查新行程...',
+    syncing: '正在同步行程数据...',
+    newDataSynced: '新行程已同步！'
+  },
+
   // Settings page
   settings: {
     title: '设置',
 
-    // Language section
-    language: '语言',
+    // Language & Units section
+    languageAndUnits: '语言和单位',
     languageLabel: '显示语言',
-
-    // Units & Currency section
-    unitsAndCurrency: '单位和货币',
     unitSystem: '单位制',
     currency: '货币',
     fuelConsumption: '燃油消耗',
@@ -165,6 +200,14 @@ export const zh = {
     dataManagement: '数据管理',
     uploadCsvFiles: '上传CSV文件',
     clearAllData: '清除所有数据',
+
+    // Porsche Connect section
+    porscheConnect: 'Porsche Connect',
+    porscheConnected: '已连接到保时捷',
+    porscheConnectDesc: '连接到保时捷服务器以自动同步您的行程数据。',
+    connectToPorsche: '连接到保时捷',
+    syncData: '同步行程数据',
+    porscheLogout: '断开连接',
 
     // Backup & restore section
     backupRestore: '备份与恢复',
@@ -315,6 +358,7 @@ export const zh = {
     consumptionVsOfficial: '与官方对比',
     seasonalVariation: '季节变化',
     chargesPerWeek: '每周充电次数',
+    energyPerCharge: '每次充电能量',
     chargingLosses: '充电损耗',
     offPeakSavings: '峰谷节省',
     fullCycles: '完整周期',
@@ -511,5 +555,40 @@ export const zh = {
     highwayCruiser: '高速巡航',
     weekendDriver: '周末驾驶',
     efficientDriver: '高效驾驶'
+  },
+
+  // My Car tab
+  myCar: {
+    noDataTitle: '未连接车辆',
+    noDataDesc: '连接到Porsche Connect以查看您的车辆信息。',
+    connectButton: '连接到保时捷',
+    vehiclePhotos: '车辆照片',
+    lastKnownLocation: '最后已知位置',
+    locationUnavailable: '位置数据不可用',
+    openInMaps: '在地图中打开',
+    heading: '朝向',
+    batteryLevel: '电池电量',
+    estimatedRange: '预计续航',
+    totalMileage: '总里程',
+    electricRange: '电动续航',
+    vehicleDetails: '车辆详情',
+    model: '型号',
+    year: '年份',
+    generation: '代系',
+    steering: '方向盘',
+    leftHandDrive: '左舵',
+    rightHandDrive: '右舵',
+    locked: '已锁定',
+    unlocked: '已解锁',
+    lastUpdated: '最后更新',
+    frontView: '前视图',
+    sideView: '侧视图',
+    rearView: '后视图',
+    topView: '俯视图',
+    tirePressure: '轮胎气压',
+    tireFL: '左前',
+    tireFR: '右前',
+    tireRL: '左后',
+    tireRR: '右后'
   }
 };

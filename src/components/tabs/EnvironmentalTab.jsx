@@ -93,7 +93,7 @@ export function EnvironmentalTab({
             })}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="month" stroke={chartColors.axis} fontSize={11} />
-              <YAxis stroke={chartColors.axis} fontSize={11} />
+              <YAxis stroke={chartColors.axis} fontSize={11} width={40} />
               <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} formatter={(v) => `${v} kg`} />
               <Legend />
               <Bar dataKey="co2Electric" name={`${t('environmental.co2Electric')} (kg)`} fill="#22c55e" radius={[4, 4, 0, 0]} />
@@ -115,7 +115,7 @@ export function EnvironmentalTab({
             }, [])}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="month" stroke={chartColors.axis} fontSize={11} />
-              <YAxis stroke={chartColors.axis} fontSize={11} />
+              <YAxis stroke={chartColors.axis} fontSize={11} width={40} />
               <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} formatter={(v) => `${v} kg`} />
               <Area type="monotone" dataKey="cumulative" name={`${t('environmental.co2Saved')} (kg)`} stroke="#22c55e" fill="#22c55e44" strokeWidth={2} />
             </AreaChart>

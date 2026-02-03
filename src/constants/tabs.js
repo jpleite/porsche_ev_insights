@@ -6,5 +6,6 @@ export const tabs = [
   { id: 'costs', label: 'Costs' },
   { id: 'environmental', label: 'Environmental' },
   { id: 'battery', label: 'Battery' },
-  { id: 'insights', label: 'Insights' }
+  { id: 'insights', label: 'Insights' },
+  { id: 'myCar', label: 'My Car' }
 ];

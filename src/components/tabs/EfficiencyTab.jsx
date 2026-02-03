@@ -72,7 +72,7 @@ export function EfficiencyTab({
               height={xAxisConfig.height}
               dy={xAxisConfig.dy}
             />
-            <YAxis stroke={chartColors.axis} fontSize={11} domain={elecConsDomain} />
+            <YAxis stroke={chartColors.axis} fontSize={11} width={40} domain={elecConsDomain} />
             <Tooltip
               contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }}
               itemStyle={{ color: chartColors.tooltipText }}
@@ -91,7 +91,7 @@ export function EfficiencyTab({
             <BarChart data={convertedSpeedEfficiency}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
               <XAxis dataKey="range" stroke={chartColors.axis} fontSize={10} />
-              <YAxis stroke={chartColors.axis} fontSize={11} domain={elecConsDomain} />
+              <YAxis stroke={chartColors.axis} fontSize={11} width={40} domain={elecConsDomain} />
               <Tooltip
                 contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }}
                 itemStyle={{ color: chartColors.tooltipText }}
@@ -113,7 +113,7 @@ export function EfficiencyTab({
               <BarChart data={data.seasonalData.map(s => ({ ...s, season: t(`seasons.${s.season?.toLowerCase?.() || s.season}`), consumption: units.elecCons(s.consumption).value }))}>
                 <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
                 <XAxis dataKey="season" stroke={chartColors.axis} fontSize={11} />
-                <YAxis stroke={chartColors.axis} fontSize={11} domain={elecConsDomain} />
+                <YAxis stroke={chartColors.axis} fontSize={11} width={40} domain={elecConsDomain} />
                 <Tooltip
                   contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }}
                   itemStyle={{ color: chartColors.tooltipText }}
@@ -137,7 +137,7 @@ export function EfficiencyTab({
           <BarChart data={convertedTripTypes}>
             <CartesianGrid strokeDasharray="3 3" stroke={chartColors.grid} />
             <XAxis dataKey="type" stroke={chartColors.axis} fontSize={9} />
-            <YAxis stroke={chartColors.axis} fontSize={11} domain={elecConsDomain} />
+            <YAxis stroke={chartColors.axis} fontSize={11} width={40} domain={elecConsDomain} />
             <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} />
             <Bar dataKey="consumption" name={units.elecConsUnit} radius={[4, 4, 0, 0]}>
               {convertedTripTypes.map((entry, i) => <Cell key={`cell-${i}`} fill={entry.color} />)}

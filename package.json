@@ -1,7 +1,7 @@
 {
   "name": "porsche_ev_insights",
   "private": true,
-  "version": "1.4.0-beta",
+  "version": "2.0.0-beta",
   "type": "module",
   "homepage": "https://jpleite.github.io/porsche_ev_insights",
   "scripts": {
@@ -10,7 +10,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "server": "cd server && npm start",
+    "server:install": "cd server && npm install",
+    "dev:full": "concurrently \"npm run dev\" \"npm run server\""
   },
   "dependencies": {
     "autoprefixer": "^10.4.23",
@@ -27,6 +30,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

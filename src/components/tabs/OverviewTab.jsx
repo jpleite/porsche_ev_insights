@@ -49,8 +49,8 @@ export function OverviewTab({
               height={xAxisConfig.height}
               dy={xAxisConfig.dy}
             />
-            <YAxis yAxisId="left" stroke={chartColors.axis} fontSize={11} />
-            <YAxis yAxisId="right" orientation="right" stroke={chartColors.axis} fontSize={11} />
+            <YAxis yAxisId="left" stroke={chartColors.axis} fontSize={11} width={35} />
+            <YAxis yAxisId="right" orientation="right" stroke={chartColors.axis} fontSize={11} width={35} />
             <Tooltip contentStyle={{ background: chartColors.tooltipBg, border: `1px solid ${chartColors.tooltipBorder}`, borderRadius: '8px' }} itemStyle={{ color: chartColors.tooltipText }} labelStyle={{ color: chartColors.tooltipText }} />
             <Legend />
             <Bar yAxisId="left" dataKey="distance" name={`${t('charts.distance')} (${units.distUnit})`} fill="#f59e0b" radius={[4, 4, 0, 0]} />

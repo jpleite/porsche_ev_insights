@@ -15,6 +15,7 @@ export const en = {
     confirm: 'Confirm',
     save: 'Save',
     close: 'Close',
+    back: 'Back',
     yes: 'Yes',
     no: 'No',
     ok: 'OK',
@@ -38,7 +39,8 @@ export const en = {
     min: 'min',
     hours: 'hours',
     minutes: 'minutes',
-    by: 'by'
+    by: 'by',
+    retry: 'Retry'
   },
 
   // Header
@@ -58,7 +60,8 @@ export const en = {
     costs: 'Costs',
     environmental: 'Environmental',
     battery: 'Battery',
-    insights: 'Insights'
+    insights: 'Insights',
+    myCar: 'My Car'
   },
 
   // Sidebar
@@ -70,11 +73,51 @@ export const en = {
   // Welcome screen
   welcome: {
     title: 'Welcome to Porsche EV Insights',
-    description: 'Upload your Porsche Connect CSV exports to analyze your driving patterns.',
-    uploadButton: 'Upload Your Data',
+    description: 'Connect to Porsche Connect or upload your CSV exports to analyze your driving patterns.',
+    connectButton: 'Connect to Porsche',
+    connectDesc: 'Live data from Porsche Connect',
+    uploadButton: 'Upload CSV Files',
     sampleButton: 'Try Sample Data',
     privacyTitle: 'Privacy Protected',
-    privacyText: 'All data processed locally in your browser.'
+    privacyText: 'All data processed locally in your browser. Credentials never stored.'
+  },
+
+  // Porsche Connect integration
+  porscheConnect: {
+    title: 'Porsche Connect',
+    subtitle: 'Live data from your vehicle',
+    checking: 'Checking connection...',
+    loginDescription: 'Sign in with your Porsche ID to sync trip data directly from your vehicle.',
+    email: 'Porsche ID (Email)',
+    password: 'Password',
+    login: 'Sign In',
+    loggingIn: 'Signing in...',
+    logout: 'Sign Out',
+    privacyNote: 'Your credentials are sent securely to Porsche and never stored.',
+    selectVehicle: 'Select a vehicle to sync:',
+    fetchData: 'Sync Trip Data',
+    loadingVehicles: 'Loading vehicles...',
+    loading: 'Loading...',
+    noVehicles: 'No vehicles found in your Porsche Connect account.',
+    noTrips: 'No trip data available. Make sure you have taken trips with Porsche Connect enabled.',
+    errorTitle: 'Connection Error',
+    serverUnavailable: 'The Porsche Connect proxy server is not running. Please start it to enable live data sync.',
+    serverInstructions: 'Run "cd server && npm install && npm start" in your terminal, then try again.',
+    syncComplete: 'Sync Complete',
+    syncStats: 'Synced {new} trips from your {model}.',
+    syncMergeStats: 'Added {new} new trips ({duplicates} duplicates skipped). Total: {total} trips.',
+    sessionExpired: 'Your session has expired. Please sign in again.',
+    connected: 'Connected',
+    lastSync: 'Last synced',
+    captchaDescription: 'Porsche requires verification. Please enter the text shown in the image below.',
+    captchaLabel: 'Verification Code',
+    captchaPlaceholder: 'Enter the text shown above',
+    verifyCaptcha: 'Verify',
+    verifying: 'Verifying...',
+    // Auto-sync
+    checkingForUpdates: 'Checking for new trips...',
+    syncing: 'Syncing trip data...',
+    newDataSynced: 'New trips synced!'
   },
 
   // Upload modal
@@ -111,12 +154,9 @@ export const en = {
   settings: {
     title: 'Settings',
 
-    // Language section
-    language: 'Language',
+    // Language & Units section
+    languageAndUnits: 'Language & Units',
     languageLabel: 'Display Language',
-
-    // Units & Currency section
-    unitsAndCurrency: 'Units & Currency',
     unitSystem: 'Unit System',
     currency: 'Currency',
     fuelConsumption: 'Fuel Consumption',
@@ -165,6 +205,14 @@ export const en = {
     dataManagement: 'Data Management',
     uploadCsvFiles: 'Upload CSV Files',
     clearAllData: 'Clear All Data',
+
+    // Porsche Connect section
+    porscheConnect: 'Porsche Connect',
+    porscheConnected: 'Connected to Porsche',
+    porscheConnectDesc: 'Connect to Porsche servers to automatically sync your trip data.',
+    connectToPorsche: 'Connect to Porsche',
+    syncData: 'Sync Trip Data',
+    porscheLogout: 'Disconnect',
 
     // Backup & restore section
     backupRestore: 'Backup & Restore',
@@ -315,6 +363,7 @@ export const en = {
     consumptionVsOfficial: 'vs Official',
     seasonalVariation: 'Seasonal Variation',
     chargesPerWeek: 'Charges/Week',
+    energyPerCharge: 'Energy/Charge',
     chargingLosses: 'Charging Losses',
     offPeakSavings: 'Off-Peak Savings',
     fullCycles: 'Full Cycles',
@@ -512,5 +561,40 @@ export const en = {
     highwayCruiser: 'Highway Cruiser',
     weekendDriver: 'Weekend Driver',
     efficientDriver: 'Efficient Driver'
+  },
+
+  // My Car tab
+  myCar: {
+    noDataTitle: 'No Vehicle Connected',
+    noDataDesc: 'Connect to Porsche Connect to view your vehicle information.',
+    connectButton: 'Connect to Porsche',
+    vehiclePhotos: 'Vehicle Photos',
+    lastKnownLocation: 'Last Known Location',
+    locationUnavailable: 'Location data unavailable',
+    openInMaps: 'Open in Maps',
+    heading: 'Heading',
+    batteryLevel: 'Battery Level',
+    estimatedRange: 'Estimated Range',
+    totalMileage: 'Total Mileage',
+    electricRange: 'Electric Range',
+    vehicleDetails: 'Vehicle Details',
+    model: 'Model',
+    year: 'Year',
+    generation: 'Generation',
+    steering: 'Steering',
+    leftHandDrive: 'Left-Hand Drive',
+    rightHandDrive: 'Right-Hand Drive',
+    locked: 'Locked',
+    unlocked: 'Unlocked',
+    lastUpdated: 'Last updated',
+    frontView: 'Front View',
+    sideView: 'Side View',
+    rearView: 'Rear View',
+    topView: 'Top View',
+    tirePressure: 'Tire Pressure',
+    tireFL: 'FL',
+    tireFR: 'FR',
+    tireRL: 'RL',
+    tireRR: 'RR'
   }
 };
