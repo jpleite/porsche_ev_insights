@@ -1,28 +1,13 @@
 /**
  * Vercel Serverless Function: POST /api/porsche/refresh
  * Refreshes the access token
+ * STATELESS: Session decoded from client, new session returned
  */
 
-// Import shared token store
-// Note: In serverless, we use a simple approach - tokens may be lost on cold starts
-// For production, consider using Vercel KV or external database
-let tokenStore;
-try {
-  tokenStore = (await import('./login.js')).tokenStore;
-} catch {
-  tokenStore = new Map();
-}
-
-const CONFIG = {
-  AUTHORIZATION_SERVER: 'identity.porsche.com',
-  CLIENT_ID: 'XhygisuebbrqQ80byOuU5VncxLIm8E6H',
-  USER_AGENT: 'porsche-ev-insights/1.0'
-};
+import { setCorsHeaders, decodeSessionData, encodeSessionData, CONFIG } from './_utils.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-session-id');
+  setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -33,7 +18,7 @@ export default async function handler(req, res) {
   }
 
   const { sessionId } = req.body;
-  const session = tokenStore.get(sessionId);
+  const session = decodeSessionData(sessionId);
 
   if (!session?.refreshToken) {
     return res.status(401).json({ error: 'Invalid session' });
@@ -55,18 +40,23 @@ export default async function handler(req, res) {
     });
 
     if (!tokenResponse.ok) {
-      tokenStore.delete(sessionId);
       return res.status(401).json({ error: 'Token refresh failed' });
     }
 
     const tokens = await tokenResponse.json();
 
-    session.accessToken = tokens.access_token;
-    session.refreshToken = tokens.refresh_token || session.refreshToken;
-    session.expiresAt = Date.now() + (tokens.expires_in * 1000);
-    tokenStore.set(sessionId, session);
+    // Create new session data and return to client
+    const newSession = encodeSessionData({
+      accessToken: tokens.access_token,
+      refreshToken: tokens.refresh_token || session.refreshToken,
+      expiresAt: Date.now() + (tokens.expires_in * 1000),
+      email: session.email
+    });
 
-    res.json({ expiresIn: tokens.expires_in });
+    res.json({
+      sessionId: newSession,
+      expiresIn: tokens.expires_in
+    });
 
   } catch (error) {
     console.error('Refresh error:', error);

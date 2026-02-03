@@ -1,20 +1,10 @@
 /**
  * Vercel Serverless Function: GET /api/porsche/vehicle/[vin]/trips
  * Returns trip statistics
+ * STATELESS: Session decoded from client header
  */
 
-let tokenStore;
-try {
-  tokenStore = (await import('../../login.js')).tokenStore;
-} catch {
-  tokenStore = new Map();
-}
-
-const CONFIG = {
-  API_BASE_URL: 'https://api.ppa.porsche.com/app',
-  X_CLIENT_ID: '41843fb4-691d-4970-85c7-2673e8ecef40',
-  USER_AGENT: 'porsche-ev-insights/1.0'
-};
+import { setCorsHeaders, getSession, CONFIG } from '../../_utils.js';
 
 const TRIP_STATISTICS = [
   'TRIP_STATISTICS_CYCLIC',
@@ -26,9 +16,7 @@ const TRIP_STATISTICS = [
 ];
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-session-id');
+  setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -38,19 +26,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const sessionId = req.headers['x-session-id'];
-  const session = tokenStore.get(sessionId);
-
-  if (!session) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  if (Date.now() > session.expiresAt - 60000) {
-    return res.status(401).json({ error: 'Token expired', needsRefresh: true });
+  const { session, error, status, needsRefresh } = getSession(req);
+  if (error) {
+    return res.status(status).json({ error, needsRefresh });
   }
 
   const { vin } = req.query;
-
   if (!vin) {
     return res.status(400).json({ error: 'VIN required' });
   }
@@ -74,7 +55,6 @@ export default async function handler(req, res) {
 
     const data = await response.json();
     res.json(data);
-
   } catch (error) {
     console.error('Trips error:', error);
     res.status(500).json({ error: 'Failed to fetch trips' });

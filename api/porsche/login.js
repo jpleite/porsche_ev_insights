@@ -2,8 +2,8 @@
  * Vercel Serverless Function: POST /api/porsche/login
  * Handles Porsche Connect OAuth2 authentication
  *
- * Optimized for serverless: cookies are passed to client and back
- * to handle captcha flow across different function instances.
+ * STATELESS APPROACH: All session data is encoded and sent to the client.
+ * Client sends it back with each request. No server-side storage needed.
  */
 
 import { JSDOM } from 'jsdom';
@@ -20,12 +20,6 @@ const CONFIG = {
     'pid:user_profile.porscheid:read', 'pid:user_profile.vehicles:read'
   ]
 };
-
-// In-memory token store (tokens persist within same instance)
-const tokenStore = new Map();
-
-// Export token store for other API routes to access
-export { tokenStore };
 
 function generateState() {
   return Math.random().toString(36).substring(2, 15);
@@ -48,13 +42,13 @@ function resolveUrl(location, baseUrl) {
   }
 }
 
-// Encode session data to send to client
-function encodeSessionData(data) {
+// Encode session data to send to client (stateless tokens)
+export function encodeSessionData(data) {
   return Buffer.from(JSON.stringify(data)).toString('base64');
 }
 
 // Decode session data from client
-function decodeSessionData(encoded) {
+export function decodeSessionData(encoded) {
   try {
     return JSON.parse(Buffer.from(encoded, 'base64').toString('utf8'));
   } catch {
@@ -284,9 +278,9 @@ export default async function handler(req, res) {
 
     const tokens = await tokenResponse.json();
 
-    // Generate session and store tokens
-    const sessionId = Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
-    tokenStore.set(sessionId, {
+    // STATELESS: Encode tokens and send to client
+    // Client will send this back with each request
+    const sessionData = encodeSessionData({
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token,
       expiresAt: Date.now() + (tokens.expires_in * 1000),
@@ -294,7 +288,7 @@ export default async function handler(req, res) {
     });
 
     res.json({
-      sessionId,
+      sessionId: sessionData,  // This is now the encoded token data
       expiresIn: tokens.expires_in
     });
 

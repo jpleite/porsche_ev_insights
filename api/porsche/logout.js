@@ -1,19 +1,13 @@
 /**
  * Vercel Serverless Function: POST /api/porsche/logout
  * Clears the user session
+ * STATELESS: Just returns success, client clears local storage
  */
 
-let tokenStore;
-try {
-  tokenStore = (await import('./login.js')).tokenStore;
-} catch {
-  tokenStore = new Map();
-}
+import { setCorsHeaders } from './_utils.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-session-id');
+  setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -23,15 +17,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { sessionId } = req.body;
-
-  if (sessionId) {
-    const session = tokenStore.get(sessionId);
-    if (session) {
-      console.log(`[Auth] Logging out ${session.email}`);
-    }
-    tokenStore.delete(sessionId);
-  }
-
+  // In stateless mode, logout just acknowledges the request
+  // The client will clear localStorage
   res.json({ success: true });
 }

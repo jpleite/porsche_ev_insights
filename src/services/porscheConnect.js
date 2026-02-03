@@ -140,7 +140,8 @@ export async function refreshToken() {
     }
 
     const data = await response.json();
-    storeSession(sessionId, data.expiresIn);
+    // Store the NEW session ID (contains refreshed tokens)
+    storeSession(data.sessionId, data.expiresIn);
     return true;
   } catch {
     clearSession();

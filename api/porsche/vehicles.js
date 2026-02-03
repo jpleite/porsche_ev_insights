@@ -1,25 +1,13 @@
 /**
  * Vercel Serverless Function: GET /api/porsche/vehicles
  * Returns list of vehicles for authenticated user
+ * STATELESS: Session decoded from client header
  */
 
-let tokenStore;
-try {
-  tokenStore = (await import('./login.js')).tokenStore;
-} catch {
-  tokenStore = new Map();
-}
-
-const CONFIG = {
-  API_BASE_URL: 'https://api.ppa.porsche.com/app',
-  X_CLIENT_ID: '41843fb4-691d-4970-85c7-2673e8ecef40',
-  USER_AGENT: 'porsche-ev-insights/1.0'
-};
+import { setCorsHeaders, getSession, porscheApiRequest } from './_utils.js';
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-session-id');
+  setCorsHeaders(res);
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -29,33 +17,18 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const sessionId = req.headers['x-session-id'];
-  const session = tokenStore.get(sessionId);
-
-  if (!session) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  if (Date.now() > session.expiresAt - 60000) {
-    return res.status(401).json({ error: 'Token expired', needsRefresh: true });
+  const { session, error, status, needsRefresh } = getSession(req);
+  if (error) {
+    return res.status(status).json({ error, needsRefresh });
   }
 
   try {
-    const response = await fetch(`${CONFIG.API_BASE_URL}/connect/v1/vehicles`, {
-      headers: {
-        'Authorization': `Bearer ${session.accessToken}`,
-        'User-Agent': CONFIG.USER_AGENT,
-        'x-client-id': CONFIG.X_CLIENT_ID
-      }
-    });
-
-    if (!response.ok) {
-      return res.status(response.status).json({ error: 'Failed to fetch vehicles' });
+    const result = await porscheApiRequest(session, '/connect/v1/vehicles');
+    if (result.error) {
+      return res.status(result.status).json({ error: result.error });
     }
 
-    const vehicles = await response.json();
-    res.json(vehicles);
-
+    res.json(result.data);
   } catch (error) {
     console.error('Vehicles error:', error);
     res.status(500).json({ error: 'Failed to fetch vehicles' });
