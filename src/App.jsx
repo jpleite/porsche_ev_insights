@@ -870,12 +870,17 @@ export default function App() {
       ? (selectedVehicle?.epaMpge ? unitConvert.mpgeToKwh100km(selectedVehicle.epaMpge) : taycanBenchmark.avgConsumption)
       : (selectedVehicle?.wltpConsumption || taycanBenchmark.avgConsumption);
 
-    const vsAvgTaycan = data.summary.avgConsumption > 0 ? Math.round(((data.summary.avgConsumption / officialConsumption) - 1) * 100) : 0;
-    let efficiencyRating = 3;
-    if (data.summary.avgConsumption <= 24) efficiencyRating = 5;
-    else if (data.summary.avgConsumption <= 26) efficiencyRating = 4;
-    else if (data.summary.avgConsumption <= 28) efficiencyRating = 3;
-    else if (data.summary.avgConsumption <= 30) efficiencyRating = 2;
+    // % above official (WLTP/EPA): negative = better, 0 = at official, positive = worse
+    const pctAboveOfficial = data.summary.avgConsumption > 0 && officialConsumption > 0
+      ? Math.round(((data.summary.avgConsumption / officialConsumption) - 1) * 100)
+      : 0;
+
+    // 1–5 star rating: performance vs vehicle's WLTP/EPA (better = 5, within 10% = 4, 20% = 3, 30% = 2, >30% = 1)
+    let efficiencyRating;
+    if (pctAboveOfficial < 0) efficiencyRating = 5;
+    else if (pctAboveOfficial <= 10) efficiencyRating = 4;
+    else if (pctAboveOfficial <= 20) efficiencyRating = 3;
+    else if (pctAboveOfficial <= 30) efficiencyRating = 2;
     else efficiencyRating = 1;
     const shortTripPenalty = data.summary.shortTripsPct > 50 ? 'High' : data.summary.shortTripsPct > 30 ? 'Moderate' : 'Low';
     const microTripPct = data.tripTypes.find(t => t.type === 'Micro (<5km)')?.count || 0;
@@ -932,7 +937,7 @@ export default function App() {
     ];
 
     return {
-      vsAvgTaycan,
+      pctAboveOfficial,
       efficiencyRating,
       shortTripPenalty,
       microTripRatio,

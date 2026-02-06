@@ -41,8 +41,8 @@ export function InsightsTab({
               </p>
             </div>
           </div>
-          <div className={`px-4 py-2 rounded-full ${benchmarks.vsAvgTaycan <= 0 ? (darkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-700') : (darkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-700')}`}>
-            {benchmarks.vsAvgTaycan <= 0 ? `${Math.abs(benchmarks.vsAvgTaycan)}% ${t('benchmark.betterThan')}` : `${benchmarks.vsAvgTaycan}% ${t('benchmark.worseThan')}`} {t('benchmark.avg')} {benchmarks.officialLabel}
+          <div className={`px-4 py-2 rounded-full ${benchmarks.pctAboveOfficial <= 0 ? (darkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-700') : (darkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-700')}`}>
+            {benchmarks.pctAboveOfficial <= 0 ? `${Math.abs(benchmarks.pctAboveOfficial)}% ${t('benchmark.betterThan')}` : `${benchmarks.pctAboveOfficial}% ${t('benchmark.worseThan')}`} {t('benchmark.avg')} {benchmarks.officialLabel}
           </div>
         </div>
       </div>

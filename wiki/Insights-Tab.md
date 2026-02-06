@@ -37,19 +37,19 @@ At the top of the tab, a prominent banner classifies your driving profile and sh
 
 ### Efficiency Rating
 
-A 1-5 star rating based on how your actual consumption compares to your vehicle's WLTP rating:
+A 1-5 star rating based on how your actual consumption compares to your vehicle's WLTP or EPA rating:
 
-| Stars | Performance vs WLTP |
+| Stars | Performance vs WLTP/EPA |
 |-------|---------------------|
-| 5 stars | Better than WLTP |
-| 4 stars | Within 10% of WLTP |
-| 3 stars | Within 20% of WLTP |
-| 2 stars | Within 30% of WLTP |
-| 1 star | More than 30% above WLTP |
+| 5 stars | Better than WLTP/EPA |
+| 4 stars | Within 10% of WLTP/EPA |
+| 3 stars | Within 20% of WLTP/EPA |
+| 2 stars | Within 30% of WLTP/EPA |
+| 1 star | More than 30% above WLTP/EPA |
 
-### WLTP Comparison
+### WLTP or EPA Comparison
 
-Shows the percentage difference between your real-world consumption and the official WLTP rating for your vehicle model.
+Shows the percentage difference between your real-world consumption and the official WLTP or EPA rating for your vehicle model.
 
 ## Dynamic Insights
 

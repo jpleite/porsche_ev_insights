@@ -554,7 +554,7 @@ export const en = {
     avg: 'Avg',
     comparison: 'Comparison',
     betterThan: 'better than',
-    worseThan: 'higher than',
+    worseThan: 'worse than',
     similar: 'Similar to',
     avgTaycan: 'Taycan Avg',
     avgPorsche: 'avg Porsche',
