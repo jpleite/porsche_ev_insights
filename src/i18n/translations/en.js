@@ -603,6 +603,11 @@ export const en = {
     tireFL: 'FL',
     tireFR: 'FR',
     tireRL: 'RL',
-    tireRR: 'RR'
+    tireRR: 'RR',
+    charging: 'Charging',
+    chargingStatus: 'Charging',
+    notCharging: 'Not charging',
+    chargeTo: 'To',
+    doneAt: 'Done at {time}'
   }
 };

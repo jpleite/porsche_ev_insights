@@ -318,6 +318,8 @@ export default function App() {
           },
           lockState: getMeasurement('LOCK_STATE_VEHICLE')?.value,
           gpsLocation: getMeasurement('GPS_LOCATION')?.value,
+          chargingSummary: getMeasurement('CHARGING_SUMMARY')?.value,
+          chargingRate: getMeasurement('CHARGING_RATE')?.value,
           tirePressure: tirePressureData ? {
             frontLeft: tirePressureData.frontLeftTire?.actualPressureBar,
             frontRight: tirePressureData.frontRightTire?.actualPressureBar,

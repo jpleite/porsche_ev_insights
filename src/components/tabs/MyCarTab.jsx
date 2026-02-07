@@ -242,7 +242,7 @@ function BatteryLevel({ percent, range, darkMode, units }) {
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-start gap-3">
       {/* Icon */}
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${getIconColor(percent)}`}>
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -296,9 +296,9 @@ function TirePressure({ tirePressure, darkMode, units }) {
   const pressureUnit = units?.pressure === 'psi' ? 'PSI' : 'bar';
 
   return (
-    <div className="flex gap-3">
-      {/* Icon - self-center to vertically center */}
-      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 self-center ${
+    <div className="flex items-start gap-3">
+      {/* Icon - aligned with other status card icons */}
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
         darkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-600'
       }`}>
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -335,6 +335,59 @@ function TirePressure({ tirePressure, darkMode, units }) {
   );
 }
 
+// Charging Component - Matches StatusCard style
+function Charging({ chargingSummary, chargingRate, darkMode, t }) {
+  const isCharging = chargingSummary?.status === 'CHARGING';
+  const powerKw = chargingRate?.chargingPower != null ? chargingRate.chargingPower : null;
+  const chargeToPercent = chargingSummary?.mode === 'DIRECT'
+    ? 100
+    : (chargingSummary?.chargingProfile?.minSoC ?? null);
+  const targetDateTime = chargingSummary?.targetDateTimeWithOffset
+    ? new Date(chargingSummary.targetDateTimeWithOffset)
+    : null;
+
+  const formatDoneAt = (date) => {
+    if (!date || isNaN(date.getTime())) return null;
+    return date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  };
+
+  const doneAtStr = formatDoneAt(targetDateTime);
+  const doneAtLabel = doneAtStr ? t('myCar.doneAt', { time: doneAtStr }) : null;
+
+  const colorClasses = isCharging
+    ? (darkMode ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-600')
+    : (darkMode ? 'bg-zinc-500/20 text-zinc-400' : 'bg-zinc-100 text-zinc-500');
+
+  const details = isCharging && [chargeToPercent != null && `${t('myCar.chargeTo')} ${chargeToPercent}%`, doneAtLabel].filter(Boolean);
+
+  const mainValue = isCharging
+    ? (powerKw != null ? `${Number(powerKw).toFixed(1)} kW` : t('myCar.chargingStatus'))
+    : t('myCar.notCharging');
+
+  return (
+    <div className="flex items-start gap-3">
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${colorClasses}`}>
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+        </svg>
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between gap-2">
+          <p className={`text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>{t('myCar.charging')}</p>
+          <p className={`${isCharging ? 'text-lg font-semibold' : 'text-sm'} ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
+            {mainValue}
+          </p>
+        </div>
+        {details.length > 0 && (
+          <p className={`text-xs mt-0.5 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>
+            {details.join(' · ')}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Status Card Component
 function StatusCard({ icon, label, value, subValue, color, darkMode }) {
   // Map color names to actual Tailwind classes (dynamic classes don't work with JIT)
@@ -348,7 +401,7 @@ function StatusCard({ icon, label, value, subValue, color, darkMode }) {
   };
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-start gap-3">
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${colorClasses[color] || colorClasses.blue}`}>
         {icon}
       </div>
@@ -492,10 +545,10 @@ export function MyCarTab({
         </div>
       </div>
 
-      {/* Battery, Tire Pressure & Mileage Cards - Above photos/map */}
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Battery Level Card - 125% relative width */}
-        <div className={`flex-[1.25] p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+      {/* Battery, Charging, Tire Pressure, Mileage - 1 col → 2 cols (md) → 4 cols (xl) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        {/* Battery Level Card */}
+        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
           <BatteryLevel
             percent={status?.batteryLevel?.percent}
             range={status?.range?.kilometers}
@@ -504,8 +557,18 @@ export function MyCarTab({
           />
         </div>
 
-        {/* Tire Pressure Card - 125% relative width */}
-        <div className={`flex-[1.25] p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+        {/* Charging Card */}
+        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+          <Charging
+            chargingSummary={status?.chargingSummary}
+            chargingRate={status?.chargingRate}
+            darkMode={darkMode}
+            t={t}
+          />
+        </div>
+
+        {/* Tire Pressure Card */}
+        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
           <TirePressure
             tirePressure={status?.tirePressure}
             darkMode={darkMode}
@@ -513,8 +576,8 @@ export function MyCarTab({
           />
         </div>
 
-        {/* Mileage Card - 100% relative width */}
-        <div className={`flex-1 p-4 rounded-xl border flex items-center ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+        {/* Mileage Card */}
+        <div className={`p-4 rounded-xl border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
           <StatusCard
             icon={
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

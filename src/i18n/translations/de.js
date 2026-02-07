@@ -597,6 +597,11 @@ export const de = {
     tireFL: 'VL',
     tireFR: 'VR',
     tireRL: 'HL',
-    tireRR: 'HR'
+    tireRR: 'HR',
+    charging: 'Laden',
+    chargingStatus: 'Lädt',
+    notCharging: 'Lädt nicht',
+    chargeTo: 'Bis',
+    doneAt: 'Fertig um {time}'
   }
 };

@@ -597,6 +597,11 @@ export const fr = {
     tireFL: 'AVG',
     tireFR: 'AVD',
     tireRL: 'ARG',
-    tireRR: 'ARD'
+    tireRR: 'ARD',
+    charging: 'Charge',
+    chargingStatus: 'En charge',
+    notCharging: 'Pas en charge',
+    chargeTo: 'À',
+    doneAt: 'Terminé à {time}'
   }
 };

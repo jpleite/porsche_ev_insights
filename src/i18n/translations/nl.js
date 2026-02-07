@@ -597,6 +597,11 @@ export const nl = {
     tireFL: 'VL',
     tireFR: 'VR',
     tireRL: 'AL',
-    tireRR: 'AR'
+    tireRR: 'AR',
+    charging: 'Laden',
+    chargingStatus: 'Aan het laden',
+    notCharging: 'Niet aan het laden',
+    chargeTo: 'Tot',
+    doneAt: 'Klaar om {time}'
   }
 };

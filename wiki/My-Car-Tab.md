@@ -39,6 +39,16 @@ Shows your current battery state:
 - **Estimated range** - How far you can drive on current charge
 - **Color coding** - Green (60%+), amber (30-60%), red (<30%)
 
+### Charging Card
+
+Shows current charging status when the vehicle is plugged in:
+
+- **Status** - "Charging" with the current charge rate (e.g. 8.7 kW), or "Not charging" when idle
+- **To X%** - Target charge level: from the charging profile (e.g. 75%) when mode is PROFILE, or "To 100%" when mode is DIRECT
+- **Done at [time]** - Estimated time charging will complete in your locale format
+
+The card uses data from the API's `CHARGING_SUMMARY` (status, mode, target time, profile) and `CHARGING_RATE` (charging power in kW). 
+
 ### Tire Pressure Card
 
 Displays pressure for all four tires:

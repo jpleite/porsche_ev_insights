@@ -597,6 +597,11 @@ export const es = {
     tireFL: 'DI',
     tireFR: 'DD',
     tireRL: 'TI',
-    tireRR: 'TD'
+    tireRR: 'TD',
+    charging: 'Carga',
+    chargingStatus: 'Cargando',
+    notCharging: 'No cargando',
+    chargeTo: 'A',
+    doneAt: 'Listo a las {time}'
   }
 };

@@ -597,6 +597,11 @@ export const ja = {
     tireFL: '左前',
     tireFR: '右前',
     tireRL: '左後',
-    tireRR: '右後'
+    tireRR: '右後',
+    charging: '充電',
+    chargingStatus: '充電中',
+    notCharging: '充電していません',
+    chargeTo: 'まで',
+    doneAt: '完了 {time}'
   }
 };

@@ -597,6 +597,11 @@ export const it = {
     tireFL: 'AS',
     tireFR: 'AD',
     tireRL: 'PS',
-    tireRR: 'PD'
+    tireRR: 'PD',
+    charging: 'Ricarica',
+    chargingStatus: 'In carica',
+    notCharging: 'Non in carica',
+    chargeTo: 'A',
+    doneAt: 'Completato alle {time}'
   }
 };

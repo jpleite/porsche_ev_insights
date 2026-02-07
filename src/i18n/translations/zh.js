@@ -597,6 +597,11 @@ export const zh = {
     tireFL: '左前',
     tireFR: '右前',
     tireRL: '左后',
-    tireRR: '右后'
+    tireRR: '右后',
+    charging: '充电',
+    chargingStatus: '充电中',
+    notCharging: '未充电',
+    chargeTo: '至',
+    doneAt: '完成时间 {time}'
   }
 };

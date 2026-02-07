@@ -602,6 +602,11 @@ export const pt = {
     tireFL: 'DE',
     tireFR: 'DD',
     tireRL: 'TE',
-    tireRR: 'TD'
+    tireRR: 'TD',
+    charging: 'Carregamento',
+    chargingStatus: 'A carregar',
+    notCharging: 'Não a carregar',
+    chargeTo: 'Até',
+    doneAt: 'Concluído às {time}'
   }
 };

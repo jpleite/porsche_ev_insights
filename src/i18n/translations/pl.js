@@ -597,6 +597,11 @@ export const pl = {
     tireFL: 'PL',
     tireFR: 'PP',
     tireRL: 'TL',
-    tireRR: 'TP'
+    tireRR: 'TP',
+    charging: 'Ładowanie',
+    chargingStatus: 'Ładowanie',
+    notCharging: 'Nie ładuje',
+    chargeTo: 'Do',
+    doneAt: 'Zakończenie o {time}'
   }
 };
