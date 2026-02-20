@@ -413,6 +413,7 @@ export const es = {
     areasToImprove: 'Áreas a Mejorar',
     yourInsights: 'Tus Análisis',
     predictions: 'Proyecciones y Pronósticos',
+    notEnoughData: 'No hay suficientes datos para mostrar proyecciones. Añade más datos de viajes (al menos 1 mes) para ver estimaciones anuales y estacionales.',
     projectedAnnualDistance: 'Distancia Anual',
     projectedAnnualTrips: 'Viajes Anuales',
     projectedAnnualEnergy: 'Energía Anual',

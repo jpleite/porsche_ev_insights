@@ -413,6 +413,7 @@ export const ja = {
     areasToImprove: '改善点',
     yourInsights: 'あなたのインサイト',
     predictions: '予測と予想',
+    notEnoughData: '投影を表示するにはデータが不足しています。年間・季節の推定値を表示するには、さらにトリップデータ（少なくとも1か月分）を追加してください。',
     projectedAnnualDistance: '年間距離',
     projectedAnnualTrips: '年間トリップ',
     projectedAnnualEnergy: '年間エネルギー',
