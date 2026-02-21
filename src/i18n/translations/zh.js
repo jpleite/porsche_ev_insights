@@ -413,6 +413,7 @@ export const zh = {
     areasToImprove: '改进领域',
     yourInsights: '您的洞察',
     predictions: '预测与展望',
+    notEnoughData: '数据不足，无法显示预测。请添加更多行程数据（至少 1 个月）以查看年度和季节性估算。',
     projectedAnnualDistance: '年度距离',
     projectedAnnualTrips: '年度行程',
     projectedAnnualEnergy: '年度能耗',

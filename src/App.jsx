@@ -784,7 +784,7 @@ export default function App() {
 
   // ========== PREDICTIVE ANALYTICS ==========
   const predictions = useMemo(() => {
-    if (!data || data.monthlyData.length < 2) return null;
+    if (!data || data.monthlyData.length < 1) return null;
 
     const months = data.monthlyData.length;
     const avgMonthlyDistance = data.summary.avgKmPerMonth;

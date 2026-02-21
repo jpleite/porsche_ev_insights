@@ -413,6 +413,7 @@ export const nl = {
     areasToImprove: 'Verbeterpunten',
     yourInsights: 'Jouw Inzichten',
     predictions: 'Prognoses en Voorspellingen',
+    notEnoughData: 'Niet genoeg data voor projecties. Voeg meer ritgegevens toe (minimaal 1 maand) voor jaar- en seizoensschattingen.',
     projectedAnnualDistance: 'Jaarlijkse Afstand',
     projectedAnnualTrips: 'Jaarlijkse Ritten',
     projectedAnnualEnergy: 'Jaarlijkse Energie',

@@ -77,46 +77,52 @@ export function InsightsTab({
         <h3 className={`font-medium mb-4 flex items-center gap-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" /></svg> {t('insights.predictions')}
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-          <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
-            <p className="text-xs text-zinc-500">{t('insights.projectedAnnualDistance')}</p>
-            <p className={`text-xl font-bold ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{units.dist(predictions.annualDistance).formatted}</p>
-          </div>
-          <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
-            <p className="text-xs text-zinc-500">{t('insights.projectedAnnualTrips')}</p>
-            <p className={`text-xl font-bold ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{predictions.annualTrips}</p>
-          </div>
-          <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
-            <p className="text-xs text-zinc-500">{t('insights.projectedAnnualEnergy')}</p>
-            <p className={`text-xl font-bold ${darkMode ? 'text-purple-400' : 'text-purple-600'}`}>{predictions.annualEnergy} kWh</p>
-          </div>
-          <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
-            <p className="text-xs text-zinc-500">{t('insights.projectedAnnualCost')}</p>
-            <p className={`text-xl font-bold ${darkMode ? 'text-amber-400' : 'text-amber-600'}`}>{units.money(predictions.annualSavings)}</p>
-            <p className="text-xs text-zinc-500">{t('insights.vsPetrol')}</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className={`p-4 rounded-xl border ${darkMode ? 'bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border-emerald-500/20' : 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200'}`}>
-            <p className={`text-sm font-medium ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{t('costs.fiveYearSavings')}</p>
-            <p className={`text-3xl font-bold ${darkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>{units.money(predictions.fiveYearSavings)}</p>
-            <p className="text-xs text-zinc-500">{units.dist(predictions.fiveYearDistance).formatted}</p>
-          </div>
-          <div className={`p-4 rounded-xl border ${darkMode ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20' : 'bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200'}`}>
-            <p className={`text-sm font-medium ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{t('costs.yearlyProjection')}</p>
-            <p className={`text-3xl font-bold ${darkMode ? 'text-blue-300' : 'text-blue-700'}`}>{units.dist(predictions.nextMonthDistance).formatted}</p>
-            <p className="text-xs text-zinc-500">~{predictions.nextMonthTrips} {t('common.trips')}</p>
-          </div>
-          <div className={`p-4 rounded-xl border ${darkMode ? 'bg-gradient-to-br from-sky-500/5 to-blue-500/5 border-sky-500/20' : 'bg-gradient-to-br from-sky-50 to-blue-50 border-sky-200'}`}>
-            <p className={`text-sm font-medium ${darkMode ? 'text-sky-400' : 'text-sky-600'}`}>{t('battery.seasonalVariation')}</p>
-            <p className={`text-lg font-bold ${darkMode ? 'text-sky-300' : 'text-sky-700'}`}>
-              {t('battery.summerRange')}: {units.elecCons(predictions.avgSummerConsumption).formatted}
-            </p>
-            <p className={`text-lg font-bold ${darkMode ? 'text-blue-300' : 'text-blue-700'}`}>
-              {t('battery.winterRange')}: {units.elecCons(predictions.avgWinterConsumption).formatted}
-            </p>
-          </div>
-        </div>
+        {predictions ? (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
+                <p className="text-xs text-zinc-500">{t('insights.projectedAnnualDistance')}</p>
+                <p className={`text-xl font-bold ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{units.dist(predictions.annualDistance).formatted}</p>
+              </div>
+              <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
+                <p className="text-xs text-zinc-500">{t('insights.projectedAnnualTrips')}</p>
+                <p className={`text-xl font-bold ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{predictions.annualTrips}</p>
+              </div>
+              <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
+                <p className="text-xs text-zinc-500">{t('insights.projectedAnnualEnergy')}</p>
+                <p className={`text-xl font-bold ${darkMode ? 'text-purple-400' : 'text-purple-600'}`}>{predictions.annualEnergy} kWh</p>
+              </div>
+              <div className={`p-3 rounded-xl ${darkMode ? 'bg-zinc-800/50' : 'bg-zinc-50'}`}>
+                <p className="text-xs text-zinc-500">{t('insights.projectedAnnualCost')}</p>
+                <p className={`text-xl font-bold ${darkMode ? 'text-amber-400' : 'text-amber-600'}`}>{units.money(predictions.annualSavings)}</p>
+                <p className="text-xs text-zinc-500">{t('insights.vsPetrol')}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className={`p-4 rounded-xl border ${darkMode ? 'bg-gradient-to-br from-emerald-500/5 to-teal-500/5 border-emerald-500/20' : 'bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200'}`}>
+                <p className={`text-sm font-medium ${darkMode ? 'text-emerald-400' : 'text-emerald-600'}`}>{t('costs.fiveYearSavings')}</p>
+                <p className={`text-3xl font-bold ${darkMode ? 'text-emerald-300' : 'text-emerald-700'}`}>{units.money(predictions.fiveYearSavings)}</p>
+                <p className="text-xs text-zinc-500">{units.dist(predictions.fiveYearDistance).formatted}</p>
+              </div>
+              <div className={`p-4 rounded-xl border ${darkMode ? 'bg-gradient-to-br from-blue-500/5 to-cyan-500/5 border-blue-500/20' : 'bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-200'}`}>
+                <p className={`text-sm font-medium ${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>{t('costs.yearlyProjection')}</p>
+                <p className={`text-3xl font-bold ${darkMode ? 'text-blue-300' : 'text-blue-700'}`}>{units.dist(predictions.nextMonthDistance).formatted}</p>
+                <p className="text-xs text-zinc-500">~{predictions.nextMonthTrips} {t('common.trips')}</p>
+              </div>
+              <div className={`p-4 rounded-xl border ${darkMode ? 'bg-gradient-to-br from-sky-500/5 to-blue-500/5 border-sky-500/20' : 'bg-gradient-to-br from-sky-50 to-blue-50 border-sky-200'}`}>
+                <p className={`text-sm font-medium ${darkMode ? 'text-sky-400' : 'text-sky-600'}`}>{t('battery.seasonalVariation')}</p>
+                <p className={`text-lg font-bold ${darkMode ? 'text-sky-300' : 'text-sky-700'}`}>
+                  {t('battery.summerRange')}: {units.elecCons(predictions.avgSummerConsumption).formatted}
+                </p>
+                <p className={`text-lg font-bold ${darkMode ? 'text-blue-300' : 'text-blue-700'}`}>
+                  {t('battery.winterRange')}: {units.elecCons(predictions.avgWinterConsumption).formatted}
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className={`text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>{t('insights.notEnoughData')}</p>
+        )}
       </div>
 
       {/* Recommendations */}
