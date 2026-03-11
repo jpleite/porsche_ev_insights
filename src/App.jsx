@@ -54,20 +54,49 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [uploadStatus, setUploadStatus] = useState({ start: null, charge: null });
-  const [electricityPrice, setElectricityPrice] = useState(0.25);
-  const [petrolPrice, setPetrolPrice] = useState(1.80);
-  const [petrolConsumption, setPetrolConsumption] = useState(8.0);
-  const [batteryCapacity, setBatteryCapacity] = useState(83.7);
-  const [unitSystem, setUnitSystem] = useState('metric');
-  const [currency, setCurrency] = useState('EUR');
-  const [fuelConsFormat, setFuelConsFormat] = useState('L/100km');
-  const [elecConsFormat, setElecConsFormat] = useState('kWh/100km');
+  // Initialize settings from localStorage synchronously to avoid race condition
+  // where useEffect-based loading triggers the unitSystem auto-correction effect
+  const [electricityPrice, setElectricityPrice] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.electricityPrice ?? 0.25;
+  });
+  const [petrolPrice, setPetrolPrice] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.petrolPrice ?? 1.80;
+  });
+  const [petrolConsumption, setPetrolConsumption] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.petrolConsumption ?? 8.0;
+  });
+  const [batteryCapacity, setBatteryCapacity] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.batteryCapacity ?? 83.7;
+  });
+  const [unitSystem, setUnitSystem] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.unitSystem ?? 'metric';
+  });
+  const [currency, setCurrency] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.currency ?? 'EUR';
+  });
+  const [fuelConsFormat, setFuelConsFormat] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.fuelConsFormat ?? 'L/100km';
+  });
+  const [elecConsFormat, setElecConsFormat] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.elecConsFormat ?? 'kWh/100km';
+  });
 
   const [modalConfig, setModalConfig] = useState(null);
   const [timeView, setTimeView] = useState('month');
   const [menuOpen, setMenuOpen] = useState(false);
   const [vehicleModel, setVehicleModel] = useState(null);
-  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.selectedVehicleId ?? null;
+  });
   const [uploadMode, setUploadMode] = useState('replace'); // 'replace' or 'merge'
   const [rawData, setRawData] = useState({ start: [], charge: [] }); // Raw CSV rows for merging
   const [showPorscheConnect, setShowPorscheConnect] = useState(false); // Porsche Connect modal
@@ -77,7 +106,10 @@ export default function App() {
   const [selectedConnectVin, setSelectedConnectVin] = useState(() => {
     return safeStorage.get(STORAGE_KEYS.PORSCHE_CONNECT_VIN) || null;
   }); // Selected VIN for multi-vehicle accounts
-  const [pressureUnit, setPressureUnit] = useState('bar'); // Pressure unit: 'bar' or 'psi'
+  const [pressureUnit, setPressureUnit] = useState(() => {
+    const s = safeStorage.get(STORAGE_KEYS.SETTINGS);
+    return s?.pressureUnit ?? 'bar';
+  }); // Pressure unit: 'bar' or 'psi'
   // Theme mode: 'light', 'dark', 'auto'
   const [themeMode, setThemeMode] = useState(() => {
     const saved = safeStorage.get('taycan_theme_mode');
@@ -110,7 +142,6 @@ export default function App() {
 
   useEffect(() => {
     let savedData = safeStorage.get(STORAGE_KEYS.DATA);
-    const savedSettings = safeStorage.get(STORAGE_KEYS.SETTINGS);
     const savedModel = safeStorage.get(STORAGE_KEYS.VEHICLE_MODEL);
     let savedRawData = safeStorage.get(STORAGE_KEYS.RAW_DATA);
 
@@ -142,18 +173,9 @@ export default function App() {
     if (savedData) setAppData(savedData);
     if (savedModel) setVehicleModel(savedModel);
     if (savedRawData) setRawData(savedRawData);
-    if (savedSettings) {
-      setElectricityPrice(savedSettings.electricityPrice ?? 0.25);
-      setPetrolPrice(savedSettings.petrolPrice ?? 1.80);
-      setPetrolConsumption(savedSettings.petrolConsumption ?? 8.0);
-      setBatteryCapacity(savedSettings.batteryCapacity ?? 83.7);
-      setUnitSystem(savedSettings.unitSystem ?? 'metric');
-      setCurrency(savedSettings.currency ?? 'EUR');
-      setFuelConsFormat(savedSettings.fuelConsFormat ?? 'L/100km');
-      setElecConsFormat(savedSettings.elecConsFormat ?? 'kWh/100km');
-      if (savedSettings.selectedVehicleId) setSelectedVehicleId(savedSettings.selectedVehicleId);
-      if (savedSettings.pressureUnit) setPressureUnit(savedSettings.pressureUnit);
-    }
+    // Settings are now loaded synchronously via useState initializer functions,
+    // so no need to load them here (which caused a race condition with the
+    // unitSystem auto-correction useEffect).
   }, []);
 
   useEffect(() => {
